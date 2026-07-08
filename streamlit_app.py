@@ -107,7 +107,6 @@ def guardar_estado(ficheiro, ref, novo_estado):
     return temp.name
 
 
-
 # --------------------------
 # INTERFACE
 # --------------------------
@@ -125,109 +124,90 @@ ficheiro = st.file_uploader(
 
 if ficheiro is not None:
 
+    try:
 
-    projetos = ler_recenseamentos(
-        ficheiro
-    )
-
-
-    st.success(
-        f"{len(projetos)} projetos carregados."
-    )
-
-
-    # PESQUISA COM SUGESTÕES
-
-    opcoes_pesquisa = (
-        projetos.astype(str)
-        .apply(
-            lambda x: " | ".join(x),
-            axis=1
+        projetos = ler_recenseamentos(
+            ficheiro
         )
-        .tolist()
-    )
+
+        st.success(
+            f"{len(projetos)} projetos carregados."
+        )
 
 
-    pesquisa = st.selectbox(
-        "Pesquisar projeto:",
-        options=opcoes_pesquisa,
-        index=None,
-        placeholder="Escreva para pesquisar..."
-    )
+        # BARRA DE PESQUISA
+        pesquisa = st.text_input(
+            "Pesquisar projeto:"
+        )
 
 
-    if pesquisa:
+        if pesquisa.strip() != "":
 
-
-        texto = pesquisa.split(" | ")[0]
-
-
-        resultados = projetos[
-            projetos.astype(str)
-            .apply(
-                lambda coluna:
-                coluna.str.contains(
-                    texto,
-                    case=False,
-                    na=False
-                )
+            resultados = pesquisar_projetos(
+                projetos,
+                pesquisa
             )
-            .any(axis=1)
-        ]
 
-    else:
+        else:
 
-        resultados = projetos
+            resultados = projetos
 
 
 
-    st.dataframe(
-        resultados,
-        use_container_width=True
-    )
-
-
-
-    if len(resultados) > 0:
-
-
-        escolha = st.selectbox(
-            "Escolha o projeto:",
-            resultados["RefObra"].astype(str)
+        st.dataframe(
+            resultados,
+            use_container_width=True
         )
 
 
-        novo_estado = st.selectbox(
-            "Novo Estado:",
-            estados
-        )
+        if len(resultados) > 0:
 
 
-        if st.button(
-            "Guardar Estado"
-        ):
-
-
-            novo_ficheiro = guardar_estado(
-                ficheiro,
-                escolha,
-                novo_estado
+            escolha = st.selectbox(
+                "Escolha o projeto:",
+                resultados["RefObra"].astype(str)
             )
 
 
-            with open(
-                novo_ficheiro,
-                "rb"
-            ) as f:
+            novo_estado = st.selectbox(
+                "Novo Estado:",
+                estados
+            )
 
 
-                st.download_button(
-                    "Descarregar Excel atualizado",
-                    f,
-                    file_name="SPRD_atualizado.xlsm"
+            if st.button(
+                "Guardar Estado"
+            ):
+
+                novo_ficheiro = guardar_estado(
+                    ficheiro,
+                    escolha,
+                    novo_estado
                 )
 
 
-            st.success(
-                "Estado atualizado!"
+                with open(novo_ficheiro, "rb") as f:
+
+                    st.download_button(
+                        "Descarregar Excel atualizado",
+                        f,
+                        file_name="SPRD_atualizado.xlsm"
+                    )
+
+
+                st.success(
+                    "Estado atualizado!"
+                )
+
+        else:
+
+            st.warning(
+                "Nenhum projeto encontrado."
             )
+
+
+    except Exception as e:
+
+        st.error(
+            f"Erro ao carregar ficheiro: {e}"
+        )
