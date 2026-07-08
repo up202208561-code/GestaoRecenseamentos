@@ -40,53 +40,54 @@ def ler_recenseamentos(ficheiro):
 
 
 
-def pesquisar_projetos(projetos,texto):
+def pesquisar_projetos(projetos, texto):
 
     texto = texto.lower()
 
     resultado = projetos[
-        projetos["RefObra"]
-        .astype(str)
-        .str.lower()
-        .str.contains(texto)
-
-        |
-
-        projetos["Rua"]
-        .astype(str)
-        .str.lower()
-        .str.contains(texto)
-
-        |
-
-        projetos["Concelho"]
-        .astype(str)
-        .str.lower()
-        .str.contains(texto)
-
-        |
-
-        projetos["Estado"]
-        .astype(str)
-        .str.lower()
-        .str.contains(texto)
+        projetos.astype(str)
+        .apply(
+            lambda coluna:
+            coluna.str.lower()
+            .str.contains(texto, na=False)
+        )
+        .any(axis=1)
     ]
 
     return resultado
 
 
 
-def guardar_estado(ficheiro,ref,novo_estado):
+def guardar_estado(ficheiro, ref, novo_estado):
+
+    import tempfile
+    import shutil
+
+
+    # criar ficheiro temporário
+    temp = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".xlsm"
+    )
+
+
+    temp.write(
+        ficheiro.getvalue()
+    )
+
+    temp.close()
+
 
     wb = openpyxl.load_workbook(
-        ficheiro,
+        temp.name,
         keep_vba=True
     )
+
 
     ws = wb["Recenseamentos"]
 
 
-    for linha in range(6,ws.max_row+1):
+    for linha in range(6, ws.max_row + 1):
 
         referencia = ws.cell(
             linha,
@@ -104,8 +105,10 @@ def guardar_estado(ficheiro,ref,novo_estado):
             break
 
 
-    wb.save(ficheiro)
+    wb.save(temp.name)
 
+
+    return temp.name
 
 
 # --------------------------
@@ -174,11 +177,20 @@ if ficheiro:
             "Guardar Estado"
         ):
 
-            guardar_estado(
-                ficheiro,
-                escolha,
-                novo_estado
-            )
+            novo_ficheiro = guardar_estado(
+    ficheiro,
+    escolha,
+    novo_estado
+)
+
+
+with open(novo_ficheiro,"rb") as f:
+
+    st.download_button(
+        "Descarregar Excel atualizado",
+        f,
+        file_name="SPRD_atualizado.xlsm"
+    )
 
 
             st.success(
