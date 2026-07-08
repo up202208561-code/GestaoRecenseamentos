@@ -136,22 +136,41 @@ if ficheiro is not None:
         )
 
 
-        # BARRA DE PESQUISA
-        pesquisa = st.text_input(
-            "Pesquisar projeto:"
-        )
+# BARRA DE PESQUISA COM SUGESTÕES
+
+opcoes_pesquisa = (
+    projetos.astype(str)
+    .apply(lambda x: " | ".join(x), axis=1)
+    .tolist()
+)
 
 
-        if pesquisa.strip() != "":
+pesquisa = st.selectbox(
+    "Pesquisar projeto:",
+    options=opcoes_pesquisa,
+    index=None,
+    placeholder="Escreva para pesquisar..."
+)
 
-            resultados = pesquisar_projetos(
-                projetos,
-                pesquisa
+
+if pesquisa:
+
+    resultados = projetos[
+        projetos.astype(str)
+        .apply(
+            lambda coluna:
+            coluna.str.contains(
+                pesquisa.split(" | ")[0],
+                case=False,
+                na=False
             )
+        )
+        .any(axis=1)
+    ]
 
-        else:
+else:
 
-            resultados = projetos
+    resultados = projetos
 
 
 
