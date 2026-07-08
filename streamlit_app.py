@@ -173,15 +173,27 @@ if ficheiro:
         )
 
 
-        if st.button(
-            "Guardar Estado"
-        ):
+        if st.button("Guardar Estado"):
 
-            novo_ficheiro = guardar_estado(
-    ficheiro,
-    escolha,
-    novo_estado
-)
+    novo_ficheiro = guardar_estado(
+        ficheiro,
+        escolha,
+        novo_estado
+    )
+
+
+    with open(novo_ficheiro, "rb") as f:
+
+        st.download_button(
+            "Descarregar Excel atualizado",
+            f,
+            file_name="SPRD_atualizado.xlsm"
+        )
+
+
+    st.success(
+        "Estado atualizado!"
+    )
 
 
 with open(novo_ficheiro,"rb") as f:
