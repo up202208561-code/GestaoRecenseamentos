@@ -25,12 +25,11 @@ def ler_recenseamentos(ficheiro):
 
     projetos = pd.DataFrame()
 
-    projetos["ID"] = dados.iloc[:,0]
-    projetos["Concelho"] = dados.iloc[:,1]
-    projetos["RefObra"] = dados.iloc[:,2]
-    projetos["Estado"] = dados.iloc[:,3]
-    projetos["Rua"] = dados.iloc[:,4]
-
+    projetos["ID"] = dados.iloc[:, 0]
+    projetos["Concelho"] = dados.iloc[:, 1]
+    projetos["RefObra"] = dados.iloc[:, 2]
+    projetos["Estado"] = dados.iloc[:, 3]
+    projetos["Rua"] = dados.iloc[:, 4]
 
     projetos = projetos.dropna(
         subset=["RefObra"]
@@ -61,15 +60,12 @@ def pesquisar_projetos(projetos, texto):
 def guardar_estado(ficheiro, ref, novo_estado):
 
     import tempfile
-    import shutil
-
 
     # criar ficheiro temporário
     temp = tempfile.NamedTemporaryFile(
         delete=False,
         suffix=".xlsm"
     )
-
 
     temp.write(
         ficheiro.getvalue()
@@ -111,10 +107,10 @@ def guardar_estado(ficheiro, ref, novo_estado):
     return temp.name
 
 
+
 # --------------------------
 # INTERFACE
 # --------------------------
-
 
 st.title(
     "Gestão de Recenseamentos"
@@ -128,7 +124,6 @@ ficheiro = st.file_uploader(
 
 
 if ficheiro:
-
 
     projetos = ler_recenseamentos(
         ficheiro
@@ -158,8 +153,8 @@ if ficheiro:
     )
 
 
-    if len(resultados)>0:
 
+    if len(resultados) > 0:
 
         escolha = st.selectbox(
             "Escolha o projeto:",
@@ -173,36 +168,25 @@ if ficheiro:
         )
 
 
-        if st.button("Guardar Estado"):
 
-    novo_ficheiro = guardar_estado(
-        ficheiro,
-        escolha,
-        novo_estado
-    )
+        if st.button(
+            "Guardar Estado"
+        ):
 
-
-    with open(novo_ficheiro, "rb") as f:
-
-        st.download_button(
-            "Descarregar Excel atualizado",
-            f,
-            file_name="SPRD_atualizado.xlsm"
-        )
+            novo_ficheiro = guardar_estado(
+                ficheiro,
+                escolha,
+                novo_estado
+            )
 
 
-    st.success(
-        "Estado atualizado!"
-    )
+            with open(novo_ficheiro, "rb") as f:
 
-
-with open(novo_ficheiro,"rb") as f:
-
-    st.download_button(
-        "Descarregar Excel atualizado",
-        f,
-        file_name="SPRD_atualizado.xlsm"
-    )
+                st.download_button(
+                    "Descarregar Excel atualizado",
+                    f,
+                    file_name="SPRD_atualizado.xlsm"
+                )
 
 
             st.success(
