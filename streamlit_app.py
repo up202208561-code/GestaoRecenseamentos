@@ -125,90 +125,109 @@ ficheiro = st.file_uploader(
 
 if ficheiro is not None:
 
-    try:
 
-        projetos = ler_recenseamentos(
-            ficheiro
+    projetos = ler_recenseamentos(
+        ficheiro
+    )
+
+
+    st.success(
+        f"{len(projetos)} projetos carregados."
+    )
+
+
+    # PESQUISA COM SUGESTÕES
+
+    opcoes_pesquisa = (
+        projetos.astype(str)
+        .apply(
+            lambda x: " | ".join(x),
+            axis=1
+        )
+        .tolist()
+    )
+
+
+    pesquisa = st.selectbox(
+        "Pesquisar projeto:",
+        options=opcoes_pesquisa,
+        index=None,
+        placeholder="Escreva para pesquisar..."
+    )
+
+
+    if pesquisa:
+
+
+        texto = pesquisa.split(" | ")[0]
+
+
+        resultados = projetos[
+            projetos.astype(str)
+            .apply(
+                lambda coluna:
+                coluna.str.contains(
+                    texto,
+                    case=False,
+                    na=False
+                )
+            )
+            .any(axis=1)
+        ]
+
+    else:
+
+        resultados = projetos
+
+
+
+    st.dataframe(
+        resultados,
+        use_container_width=True
+    )
+
+
+
+    if len(resultados) > 0:
+
+
+        escolha = st.selectbox(
+            "Escolha o projeto:",
+            resultados["RefObra"].astype(str)
         )
 
-        st.success(
-            f"{len(projetos)} projetos carregados."
+
+        novo_estado = st.selectbox(
+            "Novo Estado:",
+            estados
         )
 
 
-        # BARRA DE PESQUISA
-        pesquisa = st.text_input(
-            "Pesquisar projeto:"
-        )
+        if st.button(
+            "Guardar Estado"
+        ):
 
 
-        if pesquisa.strip() != "":
-
-            resultados = pesquisar_projetos(
-                projetos,
-                pesquisa
+            novo_ficheiro = guardar_estado(
+                ficheiro,
+                escolha,
+                novo_estado
             )
 
-        else:
 
-            resultados = projetos
-
-
-
-        st.dataframe(
-            resultados,
-            use_container_width=True
-        )
+            with open(
+                novo_ficheiro,
+                "rb"
+            ) as f:
 
 
-        if len(resultados) > 0:
-
-
-            escolha = st.selectbox(
-                "Escolha o projeto:",
-                resultados["RefObra"].astype(str)
-            )
-
-
-            novo_estado = st.selectbox(
-                "Novo Estado:",
-                estados
-            )
-
-
-            if st.button(
-                "Guardar Estado"
-            ):
-
-                novo_ficheiro = guardar_estado(
-                    ficheiro,
-                    escolha,
-                    novo_estado
+                st.download_button(
+                    "Descarregar Excel atualizado",
+                    f,
+                    file_name="SPRD_atualizado.xlsm"
                 )
 
 
-                with open(novo_ficheiro, "rb") as f:
-
-                    st.download_button(
-                        "Descarregar Excel atualizado",
-                        f,
-                        file_name="SPRD_atualizado.xlsm"
-                    )
-
-
-                st.success(
-                    "Estado atualizado!"
-                )
-
-        else:
-
-            st.warning(
-                "Nenhum projeto encontrado."
+            st.success(
+                "Estado atualizado!"
             )
-
-
-    except Exception as e:
-
-        st.error(
-            f"Erro ao carregar ficheiro: {e}"
-        )
