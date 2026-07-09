@@ -86,7 +86,7 @@ def guardar_estado(ficheiro, ref_obra, novo_estado):
     wb.save(temp.name)
 
     return temp.name
-    from dados import CAMPOS
+    
 
 
 def procurar_linha_projeto(ws, ref_obra):
@@ -120,6 +120,7 @@ def ler_projeto(ws, linha):
         ).value
 
     return projeto
+
 def guardar_projeto(ficheiro, ref_obra, dados_projeto):
     """
     Atualiza todos os campos editáveis de uma obra.
