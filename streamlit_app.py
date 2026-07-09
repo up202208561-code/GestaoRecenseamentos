@@ -8,7 +8,8 @@ from excel import (
     pesquisar_projetos,
     procurar_linha_projeto,
     ler_projeto,
-    guardar_projeto
+    guardar_projeto,
+    criar_projeto
 )
 
 # -------------------------------------------------
@@ -21,6 +22,15 @@ st.set_page_config(
 )
 
 st.title("Gestão de Recenseamentos")
+
+
+ficheiro = st.file_uploader(
+    "Escolher ficheiro Excel",
+    type=["xlsm"]
+)
+
+if ficheiro is None:
+    st.stop()
 
 tab_editar, tab_nova = st.tabs(
     [
@@ -35,17 +45,6 @@ tab_editar, tab_nova = st.tabs(
 
 with tab_editar:
 
-    # -------------------------------------------------
-    # CARREGAR EXCEL
-    # -------------------------------------------------
-
-    ficheiro = st.file_uploader(
-        "Escolher ficheiro Excel",
-        type=["xlsm"]
-    )
-
-    if ficheiro is None:
-        st.stop()
 
     # -------------------------------------------------
     # LER LISTA DE PROJETOS
@@ -426,4 +425,25 @@ with tab_nova:
         use_container_width=True
     ):
 
-        st.info("Ainda não implementado.")
+        try:
+
+            novo_ficheiro = criar_projeto(
+                ficheiro,
+                dados_novos
+            )
+
+            st.success("Obra criada com sucesso.")
+
+            with open(novo_ficheiro, "rb") as f:
+
+                st.download_button(
+                    "📥 Descarregar Excel atualizado",
+                    data=f,
+                    file_name="SPRD_atualizado.xlsm",
+                    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
+                    use_container_width=True
+                )
+
+        except Exception as e:
+
+            st.error(f"Erro: {e}")
