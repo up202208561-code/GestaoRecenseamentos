@@ -169,7 +169,12 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
         nome = campo["campo"]
 
         if nome in dados_projeto:
-
+                
+        valor = dados_projeto[nome]
+        
+        if nome == "TaxaPenetracao":
+            valor = valor / 100
+            
             ws.cell(
                 row=linha,
                 column=campo["coluna"]
@@ -257,7 +262,12 @@ def criar_projeto(ficheiro, dados_projeto):
         nome = campo["campo"]
 
         if nome in dados_projeto:
+            
+        valor = dados_projeto[nome]
 
+        if nome == "TaxaPenetracao":
+            valor = valor / 100
+            
             ws.cell(
                 row=nova_linha,
                 column=campo["coluna"]
