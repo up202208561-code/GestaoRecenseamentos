@@ -1,6 +1,10 @@
 import streamlit as st
-import pandas as pd
-import openpyxl
+from dados import ESTADOS
+from excel import (
+    ler_recenseamentos,
+    pesquisar_projetos,
+    guardar_estado
+)
 
 
 estados = [
