@@ -9,7 +9,6 @@ ESTADOS = [
     "Executado"
 ]
 
-
 CAMPOS = [
 
     # =====================================================
@@ -21,7 +20,7 @@ CAMPOS = [
         "nome": "ID",
         "campo": "ID",
         "coluna": 1,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
@@ -67,7 +66,7 @@ CAMPOS = [
         "nome": "Nº polícia inicial",
         "campo": "NumeroInicial",
         "coluna": 6,
-        "tipo": "texto",
+        "tipo": "int",
         "editavel": True
     },
 
@@ -76,7 +75,7 @@ CAMPOS = [
         "nome": "Nº polícia final",
         "campo": "NumeroFinal",
         "coluna": 7,
-        "tipo": "texto",
+        "tipo": "int",
         "editavel": True
     },
 
@@ -89,7 +88,7 @@ CAMPOS = [
         "nome": "Extensão PE63 (m)",
         "campo": "PE63",
         "coluna": 8,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -98,7 +97,7 @@ CAMPOS = [
         "nome": "Extensão PE110 (m)",
         "campo": "PE110",
         "coluna": 9,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -107,7 +106,7 @@ CAMPOS = [
         "nome": "Extensão PE160 (m)",
         "campo": "PE160",
         "coluna": 10,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -116,7 +115,7 @@ CAMPOS = [
         "nome": "Extensão PE200 (m)",
         "campo": "PE200",
         "coluna": 11,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -125,7 +124,7 @@ CAMPOS = [
         "nome": "Investimento (€)",
         "campo": "InvestimentoRede",
         "coluna": 13,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -135,64 +134,46 @@ CAMPOS = [
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Moradia Conversão",
+        "nome": "Nº Moradias Conversão",
         "campo": "MoradiaConv",
         "coluna": 14,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Moradia Reconversão",
+        "nome": "Nº Moradias Reconversão",
         "campo": "MoradiaReconv",
         "coluna": 15,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Moradia Nº Imóveis",
-        "campo": "MoradiaImoveis",
-        "coluna": 16,
-        "tipo": "numero",
-        "editavel": True
-    },
-
-    {
-        "secao": "Mercado Potencial",
-        "nome": "Edif. Coletivo Conversão",
+        "nome": "Nº Edif. Coletivo Conversão",
         "campo": "EdificioConv",
         "coluna": 17,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Edif. Coletivo Reconversão",
+        "nome": "Nº Edif. Coletivo Reconversão",
         "campo": "EdificioReconv",
         "coluna": 18,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Edif. Coletivo Nº Imóveis",
-        "campo": "EdificioImoveis",
-        "coluna": 19,
-        "tipo": "numero",
-        "editavel": True
-    },
-
-    {
-        "secao": "Mercado Potencial",
-        "nome": "Pequeno Terciário",
+        "nome": "Nº Pequeno Terciário",
         "campo": "PequenoTerciario",
         "coluna": 20,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
@@ -201,88 +182,88 @@ CAMPOS = [
         "nome": "Consumo estimado (m³)",
         "campo": "ConsumoExistente",
         "coluna": 21,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Mercado novo - Moradia",
+        "nome": "Nº Moradias",
         "campo": "NovoMoradia",
         "coluna": 23,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Mercado novo - Edif. Coletivo (PA)",
+        "nome": "Edif. Coletivo (Nº PAs)",
         "campo": "NovoEdificioPA",
         "coluna": 24,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Mercado novo - Edif. Coletivo (Nº Imóveis)",
+        "nome": "Edif. Coletivo (Nº Imóveis)",
         "campo": "NovoEdificioImoveis",
         "coluna": 25,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Mercado novo - Pequeno Terciário",
+        "nome": "Nº Pequeno Terciário",
         "campo": "NovoTerciario",
         "coluna": 26,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Mercado novo - Consumo estimado (m³)",
+        "nome": "Consumo estimado (m³)",
         "campo": "NovoConsumo",
         "coluna": 27,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Grande consumidor - Nº de PA BP",
+        "nome": "Nº de PAs BP",
         "campo": "PABP",
         "coluna": 29,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Grande consumidor - Consumo estimado BP (m³)",
+        "nome": "Consumo estimado BP (m³)",
         "campo": "ConsumoBP",
         "coluna": 30,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Grande consumidor - Nº de PA MP",
+        "nome": "Nº de PAs MP",
         "campo": "PAMP",
         "coluna": 31,
-        "tipo": "numero",
+        "tipo": "int",
         "editavel": True
     },
 
     {
         "secao": "Mercado Potencial",
-        "nome": "Grande consumidor - Consumo estimado MP (m³)",
+        "nome": "Consumo estimado MP (m³)",
         "campo": "ConsumoMP",
         "coluna": 32,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -293,7 +274,7 @@ CAMPOS = [
         "nome": "Taxa de penetração estimada (%)",
         "campo": "TaxaPenetracao",
         "coluna": 36,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -302,7 +283,7 @@ CAMPOS = [
         "nome": "Investimento (€)",
         "campo": "InvestimentoMercado",
         "coluna": 46,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -311,7 +292,7 @@ CAMPOS = [
         "nome": "Outros investimentos",
         "campo": "OutrosInvestimentos",
         "coluna": 49,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -320,7 +301,7 @@ CAMPOS = [
         "nome": "Comparticipações",
         "campo": "Comparticipacoes",
         "coluna": 52,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
@@ -329,7 +310,7 @@ CAMPOS = [
         "nome": "Taxa Interna de Retorno - TIR (%)",
         "campo": "TIR",
         "coluna": 61,
-        "tipo": "numero",
+        "tipo": "float",
         "editavel": True
     },
 
