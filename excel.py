@@ -120,3 +120,58 @@ def ler_projeto(ws, linha):
         ).value
 
     return projeto
+def guardar_projeto(ficheiro, ref_obra, dados_projeto):
+    """
+    Atualiza todos os campos editáveis de uma obra.
+    dados_projeto é um dicionário:
+    {
+        "Concelho": "...",
+        "Estado": "...",
+        "Rua": "...",
+        ...
+    }
+    """
+
+    temp = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".xlsm"
+    )
+
+    temp.write(
+        ficheiro.getvalue()
+    )
+
+    temp.close()
+
+    wb = openpyxl.load_workbook(
+        temp.name,
+        keep_vba=True
+    )
+
+    ws = wb["Recenseamentos"]
+
+    linha = procurar_linha_projeto(
+        ws,
+        ref_obra
+    )
+
+    if linha is None:
+        raise Exception("Projeto não encontrado.")
+
+    for campo in CAMPOS:
+
+        if not campo["editavel"]:
+            continue
+
+        nome = campo["nome"]
+
+        if nome in dados_projeto:
+
+            ws.cell(
+                row=linha,
+                column=campo["coluna"]
+            ).value = dados_projeto[nome]
+
+    wb.save(temp.name)
+
+    return temp.name
