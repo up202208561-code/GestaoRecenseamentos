@@ -3,14 +3,14 @@ import openpyxl
 import tempfile
 
 from dados import CAMPOS
-#from excel import (
+from excel import (
     ler_recenseamentos,
     pesquisar_projetos,
     procurar_linha_projeto,
     ler_projeto,
     guardar_projeto,
     criar_projeto
-)#
+)
 
 # -------------------------------------------------
 # TÍTULO
