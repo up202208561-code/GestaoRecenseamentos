@@ -184,56 +184,57 @@ for campo in CAMPOS:
 
         )
 
-# ----------------------------
-# INTEIRO
-# ----------------------------
+    # ----------------------------
+    # INTEIRO
+    # ----------------------------
 
-elif campo["tipo"] == "int":
+    elif campo["tipo"] == "int":
 
-    if valor is None:
-        valor = 0
+        if valor is None:
+            valor = 0
 
-    try:
-        valor = int(valor)
-    except:
-        valor = 0
+        try:
+            valor = int(valor)
+        except:
+            valor = 0
 
-    dados[campo["campo"]] = st.number_input(
+        dados[campo["campo"]] = st.number_input(
 
-        campo["nome"],
+            campo["nome"],
 
-        value=valor,
+            value=valor,
 
-        step=1,
+            step=1,
 
-        format="%d"
+            format="%d"
 
-    )
-# ----------------------------
-# DECIMAL
-# ----------------------------
+        )
 
-elif campo["tipo"] == "float":
+    # ----------------------------
+    # DECIMAL
+    # ----------------------------
 
-    if valor is None:
-        valor = 0.0
+    elif campo["tipo"] == "float":
 
-    try:
-        valor = float(valor)
-    except:
-        valor = 0.0
+        if valor is None:
+            valor = 0.0
 
-    dados[campo["campo"]] = st.number_input(
+        try:
+            valor = float(valor)
+        except:
+            valor = 0.0
 
-        campo["nome"],
+        dados[campo["campo"]] = st.number_input(
 
-        value=valor,
+            campo["nome"],
 
-        step=0.01,
+            value=valor,
 
-        format="%.2f"
+            step=0.01,
 
-    )
+            format="%.2f"
+
+        )
 
     # ----------------------------
     # LISTA
@@ -244,11 +245,8 @@ elif campo["tipo"] == "float":
         opcoes = campo["opcoes"]
 
         if valor not in opcoes:
-
             indice = 0
-
         else:
-
             indice = opcoes.index(valor)
 
         dados[campo["campo"]] = st.selectbox(
@@ -260,6 +258,7 @@ elif campo["tipo"] == "float":
             index=indice
 
         )
+
 # -------------------------------------------------
 # GUARDAR
 # -------------------------------------------------
