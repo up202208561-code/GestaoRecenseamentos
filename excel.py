@@ -219,8 +219,11 @@ def criar_projeto(ficheiro, dados_projeto):
 
     ws = wb["Recenseamentos"]
 
-    ultima_linha = ws.max_row
-    nova_linha = ultima_linha + 1
+    for linha in range(ws.max_row, 5, -1):
+        if ws.cell(row=linha, column=3).value not in (None, ""):
+            nova_linha = linha + 1
+            break
+    
 
     # Copiar altura da linha
     ws.row_dimensions[nova_linha].height = \
