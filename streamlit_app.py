@@ -8,7 +8,8 @@ from excel import (
     pesquisar_projetos,
     guardar_estado,
     procurar_linha_projeto,
-    ler_projeto
+    ler_projeto,
+    guardar_projeto
 )
 
 # --------------------------
@@ -126,13 +127,32 @@ if ficheiro is not None:
             # Alterar estado (funcionalidade atual)
             # --------------------------
 
-            if st.button("Guardar Estado"):
+            if st.button("Guardar Projeto"):
 
-                novo_ficheiro = guardar_estado(
-                    ficheiro,
-                    escolha,
-                    estado
-                )
+    dados = {
+
+        "Concelho": concelho,
+        "Estado": estado,
+        "Rua": rua,
+        "NumeroPolicia": numero
+
+    }
+
+    novo_ficheiro = guardar_projeto(
+        ficheiro,
+        escolha,
+        dados
+    )
+
+    with open(novo_ficheiro, "rb") as f:
+
+        st.download_button(
+            "Descarregar Excel atualizado",
+            f,
+            file_name="SPRD_atualizado.xlsm"
+        )
+
+    st.success("Projeto atualizado com sucesso.")
 
                 with open(novo_ficheiro, "rb") as f:
 
