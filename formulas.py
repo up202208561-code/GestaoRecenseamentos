@@ -54,7 +54,7 @@ FORMULAS = {
 
     57: "=IF(BC{r}>0,(BB{r}*0.011)/AX{r},0)",
 
-    58: "=IF(BF{r}>0,BA{r}/AX{r},0)",
+    58: "=IF(BD{r}>0,BA{r}/AX{r},0)",
 
     59: "=IF(BF{r}>0,BA{r}/BB{r},0)",
 
