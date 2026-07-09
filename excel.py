@@ -185,6 +185,12 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
                 column=campo["coluna"]
             ).value = valor
 
+        for coluna, formula in FORMULAS.items():
+            ws.cell(
+                row=linha,
+                column=coluna
+            ).value = formula.format(r=linha)
+
     wb.save(temp.name)
 
     return temp.name
