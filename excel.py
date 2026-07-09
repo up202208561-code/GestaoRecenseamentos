@@ -86,3 +86,37 @@ def guardar_estado(ficheiro, ref_obra, novo_estado):
     wb.save(temp.name)
 
     return temp.name
+    from dados import CAMPOS
+
+
+def procurar_linha_projeto(ws, ref_obra):
+    """
+    Procura a linha correspondente a uma referência de obra.
+    """
+
+    for linha in range(6, ws.max_row + 1):
+
+        if ws.cell(row=linha, column=3).value == ref_obra:
+            return linha
+
+    return None
+
+
+def ler_projeto(ws, linha):
+    """
+    Lê todos os campos definidos em CAMPOS para uma determinada linha
+    da folha Recenseamentos.
+
+    Devolve um dicionário.
+    """
+
+    projeto = {}
+
+    for campo in CAMPOS:
+
+        projeto[campo["nome"]] = ws.cell(
+            row=linha,
+            column=campo["coluna"]
+        ).value
+
+    return projeto
