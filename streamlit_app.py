@@ -2,185 +2,287 @@ import streamlit as st
 import openpyxl
 import tempfile
 
-from dados import ESTADOS
+from dados import CAMPOS
 from excel import (
     ler_recenseamentos,
     pesquisar_projetos,
-    guardar_estado,
     procurar_linha_projeto,
     ler_projeto,
     guardar_projeto
 )
 
-# --------------------------
-# INTERFACE
-# --------------------------
+# -------------------------------------------------
+# TÍTULO
+# -------------------------------------------------
+
+st.set_page_config(
+    page_title="Gestão de Recenseamentos",
+    layout="wide"
+)
 
 st.title("Gestão de Recenseamentos")
+
+# -------------------------------------------------
+# CARREGAR EXCEL
+# -------------------------------------------------
 
 ficheiro = st.file_uploader(
     "Escolher ficheiro Excel",
     type=["xlsm"]
 )
 
-if ficheiro is not None:
+if ficheiro is None:
+    st.stop()
+
+# -------------------------------------------------
+# LER LISTA DE PROJETOS
+# -------------------------------------------------
+
+try:
+
+    projetos = ler_recenseamentos(ficheiro)
+
+except Exception as e:
+
+    st.error(e)
+    st.stop()
+
+st.success(
+    f"{len(projetos)} projetos carregados."
+)
+
+# -------------------------------------------------
+# PESQUISA
+# -------------------------------------------------
+
+pesquisa = st.text_input(
+    "Pesquisar obra"
+)
+
+if pesquisa.strip():
+
+    resultados = pesquisar_projetos(
+        projetos,
+        pesquisa
+    )
+
+else:
+
+    resultados = projetos
+
+st.dataframe(
+    resultados,
+    use_container_width=True
+)
+
+if resultados.empty:
+
+    st.warning(
+        "Nenhum projeto encontrado."
+    )
+
+    st.stop()
+
+# -------------------------------------------------
+# ESCOLHER PROJETO
+# -------------------------------------------------
+
+escolha = st.selectbox(
+
+    "Projeto",
+
+    resultados["RefObra"].astype(str)
+
+)
+
+# -------------------------------------------------
+# ABRIR EXCEL
+# -------------------------------------------------
+
+temp = tempfile.NamedTemporaryFile(
+
+    delete=False,
+
+    suffix=".xlsm"
+
+)
+
+temp.write(
+
+    ficheiro.getvalue()
+
+)
+
+temp.close()
+
+wb = openpyxl.load_workbook(
+
+    temp.name,
+
+    keep_vba=True
+
+)
+
+ws = wb["Recenseamentos"]
+
+linha = procurar_linha_projeto(
+
+    ws,
+
+    escolha
+
+)
+
+projeto = ler_projeto(
+
+    ws,
+
+    linha
+
+)
+
+# -------------------------------------------------
+# FORMULÁRIO
+# -------------------------------------------------
+
+st.divider()
+
+st.header("Dados da Obra")
+
+dados = {}
+
+secao_atual = None
+
+for campo in CAMPOS:
+
+    if not campo["editavel"]:
+        continue
+
+    if campo["secao"] != secao_atual:
+
+        secao_atual = campo["secao"]
+
+        st.subheader(secao_atual)
+
+    valor = projeto.get(
+
+        campo["campo"]
+
+    )
+
+    # ----------------------------
+    # TEXTO
+    # ----------------------------
+
+    if campo["tipo"] == "texto":
+
+        dados[campo["campo"]] = st.text_input(
+
+            campo["nome"],
+
+            value="" if valor is None else str(valor)
+
+        )
+
+    # ----------------------------
+    # NÚMERO
+    # ----------------------------
+
+    elif campo["tipo"] == "numero":
+
+        if valor is None:
+
+            valor = 0
+
+        try:
+
+            valor = float(valor)
+
+        except:
+
+            valor = 0
+
+        dados[campo["campo"]] = st.number_input(
+
+            campo["nome"],
+
+            value=valor
+
+        )
+
+    # ----------------------------
+    # LISTA
+    # ----------------------------
+
+    elif campo["tipo"] == "lista":
+
+        opcoes = campo["opcoes"]
+
+        if valor not in opcoes:
+
+            indice = 0
+
+        else:
+
+            indice = opcoes.index(valor)
+
+        dados[campo["campo"]] = st.selectbox(
+
+            campo["nome"],
+
+            opcoes,
+
+            index=indice
+
+        )
+# -------------------------------------------------
+# GUARDAR
+# -------------------------------------------------
+
+st.divider()
+
+if st.button(
+    "💾 Guardar Projeto",
+    use_container_width=True
+):
 
     try:
 
-        projetos = ler_recenseamentos(ficheiro)
+        novo_ficheiro = guardar_projeto(
+
+            ficheiro,
+
+            escolha,
+
+            dados
+
+        )
 
         st.success(
-            f"{len(projetos)} projetos carregados."
+            "Projeto atualizado com sucesso."
         )
 
-        # --------------------------
-        # Pesquisa
-        # --------------------------
+        with open(
+            novo_ficheiro,
+            "rb"
+        ) as f:
 
-        pesquisa = st.text_input(
-            "Pesquisar projeto:"
-        )
+            st.download_button(
 
-        if pesquisa.strip() != "":
-            resultados = pesquisar_projetos(
-                projetos,
-                pesquisa
-            )
-        else:
-            resultados = projetos
+                "📥 Descarregar Excel atualizado",
 
-        st.dataframe(
-            resultados,
-            use_container_width=True
-        )
+                data=f,
 
-        if len(resultados) > 0:
+                file_name="SPRD_atualizado.xlsm",
 
-            escolha = st.selectbox(
-                "Escolha o projeto:",
-                resultados["RefObra"].astype(str)
-            )
+                mime="application/vnd.ms-excel.sheet.macroEnabled.12",
 
-            # --------------------------
-            # Abrir Excel
-            # --------------------------
+                use_container_width=True
 
-            temp = tempfile.NamedTemporaryFile(
-                delete=False,
-                suffix=".xlsm"
-            )
-
-            temp.write(
-                ficheiro.getvalue()
-            )
-
-            temp.close()
-
-            wb = openpyxl.load_workbook(
-                temp.name,
-                keep_vba=True
-            )
-
-            ws = wb["Recenseamentos"]
-
-            linha = procurar_linha_projeto(
-                ws,
-                escolha
-            )
-
-            projeto = ler_projeto(
-                ws,
-                linha
-            )
-
-            # --------------------------
-            # Dados da obra
-            # --------------------------
-
-            st.subheader("Dados da Obra")
-
-            concelho = st.text_input(
-                "Concelho",
-                value=projeto["Concelho"]
-            )
-
-            estado = st.selectbox(
-                "Estado",
-                ESTADOS,
-                index=ESTADOS.index(projeto["Estado"])
-                if projeto["Estado"] in ESTADOS else 0
-            )
-
-            rua = st.text_input(
-                "Rua",
-                value=projeto["Rua"]
-            )
-
-            numero_inicial = st.text_input(
-    "Nº polícia inicial",
-    value=projeto["NumeroInicial"]
-    if projeto["NumeroInicial"] is not None
-    else ""
-)
-
-numero_final = st.text_input(
-    "Nº polícia final",
-    value=projeto["NumeroFinal"]
-    if projeto["NumeroFinal"] is not None
-    else ""
-)
-
-            # --------------------------
-            # Alterar estado (funcionalidade atual)
-            # --------------------------
-
-            if st.button("Guardar Projeto"):
-
-    dados = {
-
-        "Concelho": concelho,
-        "Estado": estado,
-        "Rua": rua,
-        "NumeroPolicia": numero
-
-    }
-
-    novo_ficheiro = guardar_projeto(
-        ficheiro,
-        escolha,
-        dados
-    )
-
-    with open(novo_ficheiro, "rb") as f:
-
-        st.download_button(
-            "Descarregar Excel atualizado",
-            f,
-            file_name="SPRD_atualizado.xlsm"
-        )
-
-    st.success("Projeto atualizado com sucesso.")
-
-                with open(novo_ficheiro, "rb") as f:
-
-                    st.download_button(
-                        "Descarregar Excel atualizado",
-                        f,
-                        file_name="SPRD_atualizado.xlsm"
-                    )
-
-                st.success(
-                    "Estado atualizado!"
-                )
-
-        else:
-
-            st.warning(
-                "Nenhum projeto encontrado."
             )
 
     except Exception as e:
 
         st.error(
-            f"Erro ao carregar ficheiro: {e}"
+            f"Erro ao guardar: {e}"
         )
