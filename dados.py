@@ -133,7 +133,7 @@ CAMPOS = [
     # =====================================================
 
     {
-        "secao": "Mercado Potencial - Mercado Existente"
+        "secao": "Mercado Potencial - Mercado Existente",
         "nome": "Nº Moradias Conversão",
         "campo": "MoradiaConv",
         "coluna": 14,
@@ -142,7 +142,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Existente"
+        "secao": "Mercado Potencial - Mercado Existente",
         "nome": "Nº Moradias Reconversão",
         "campo": "MoradiaReconv",
         "coluna": 15,
@@ -151,7 +151,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Existente"
+        "secao": "Mercado Potencial - Mercado Existente",
         "nome": "Nº Edif. Coletivo Conversão",
         "campo": "EdificioConv",
         "coluna": 17,
@@ -160,7 +160,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Existente"
+        "secao": "Mercado Potencial - Mercado Existente",
         "nome": "Nº Edif. Coletivo Reconversão",
         "campo": "EdificioReconv",
         "coluna": 18,
@@ -169,7 +169,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Existente"
+        "secao": "Mercado Potencial - Mercado Existente",
         "nome": "Nº Pequeno Terciário",
         "campo": "PequenoTerciario",
         "coluna": 20,
@@ -178,7 +178,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Existente"
+        "secao": "Mercado Potencial - Mercado Existente",
         "nome": "Consumo estimado (m³)",
         "campo": "ConsumoExistente",
         "coluna": 21,
@@ -187,7 +187,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Novo"
+        "secao": "Mercado Potencial - Mercado Novo",
         "nome": "Nº Moradias",
         "campo": "NovoMoradia",
         "coluna": 23,
@@ -196,7 +196,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Novo"
+        "secao": "Mercado Potencial - Mercado Novo",
         "nome": "Edif. Coletivo (Nº PAs)",
         "campo": "NovoEdificioPA",
         "coluna": 24,
@@ -205,7 +205,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Novo"
+        "secao": "Mercado Potencial - Mercado Novo",
         "nome": "Edif. Coletivo (Nº Imóveis)",
         "campo": "NovoEdificioImoveis",
         "coluna": 25,
@@ -214,7 +214,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Novo"
+        "secao": "Mercado Potencial - Mercado Novo",
         "nome": "Nº Pequeno Terciário",
         "campo": "NovoTerciario",
         "coluna": 26,
@@ -223,7 +223,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Mercado Novo"
+        "secao": "Mercado Potencial - Mercado Novo",
         "nome": "Consumo estimado (m³)",
         "campo": "NovoConsumo",
         "coluna": 27,
@@ -232,7 +232,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Grande Consumidor"
+        "secao": "Mercado Potencial - Grande Consumidor",
         "nome": "Nº de PAs BP",
         "campo": "PABP",
         "coluna": 29,
@@ -241,7 +241,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Grande Consumidor"
+        "secao": "Mercado Potencial - Grande Consumidor",
         "nome": "Consumo estimado BP (m³)",
         "campo": "ConsumoBP",
         "coluna": 30,
@@ -250,7 +250,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Grande Consumidor"
+        "secao": "Mercado Potencial - Grande Consumidor",
         "nome": "Nº de PAs MP",
         "campo": "PAMP",
         "coluna": 31,
@@ -259,7 +259,7 @@ CAMPOS = [
     },
 
     {
-        "secao": "Mercado Potencial - Grande Consumidor"
+        "secao": "Mercado Potencial - Grande Consumidor",
         "nome": "Consumo estimado MP (m³)",
         "campo": "ConsumoMP",
         "coluna": 32,
