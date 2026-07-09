@@ -197,8 +197,8 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
 
 def criar_projeto(ficheiro, dados_projeto):
     """
-    Cria uma nova obra copiando a última linha existente,
-    mantendo fórmulas, estilos e formatação.
+    Cria uma nova obra mantendo fórmulas, estilos e formatação.
+    Se não existir nenhuma obra, utiliza a linha 6 como modelo.
     """
 
     temp = tempfile.NamedTemporaryFile(
@@ -206,10 +206,7 @@ def criar_projeto(ficheiro, dados_projeto):
         suffix=".xlsm"
     )
 
-    temp.write(
-        ficheiro.getvalue()
-    )
-
+    temp.write(ficheiro.getvalue())
     temp.close()
 
     wb = openpyxl.load_workbook(
@@ -220,36 +217,49 @@ def criar_projeto(ficheiro, dados_projeto):
     ws = wb["Recenseamentos"]
 
     # ---------------------------------
-    # Encontrar a última obra existente
+    # Encontrar última obra existente
     # ---------------------------------
 
-    ultima_linha = 5
+    ultima_linha = None
 
     for linha in range(6, ws.max_row + 1):
 
         if ws.cell(row=linha, column=3).value not in (None, ""):
             ultima_linha = linha
 
-    nova_linha = ultima_linha + 1
-
     # ---------------------------------
-    # Copiar altura da linha
+    # Definir linha modelo e nova linha
     # ---------------------------------
 
-    if ultima_linha >= 6:
+    if ultima_linha is None:
+
+        # Primeira obra
+        nova_linha = 6
+
+        # Se existir uma linha 6 no template, usa-a como modelo
+        if ws.max_row >= 6:
+            linha_modelo = 6
+        else:
+            linha_modelo = None
+
+    else:
+
+        linha_modelo = ultima_linha
+        nova_linha = ultima_linha + 1
+
+    # ---------------------------------
+    # Copiar formatação
+    # ---------------------------------
+
+    if linha_modelo is not None:
+
         ws.row_dimensions[nova_linha].height = \
-            ws.row_dimensions[ultima_linha].height
-
-    # ---------------------------------
-    # Copiar conteúdo e formatação
-    # ---------------------------------
-
-    if ultima_linha >= 6:
+            ws.row_dimensions[linha_modelo].height
 
         for col in range(1, ws.max_column + 1):
 
             origem = ws.cell(
-                row=ultima_linha,
+                row=linha_modelo,
                 column=col
             )
 
@@ -258,14 +268,23 @@ def criar_projeto(ficheiro, dados_projeto):
                 column=col
             )
 
-            destino.value = origem.value
-
             destino.font = copy(origem.font)
             destino.fill = copy(origem.fill)
             destino.border = copy(origem.border)
             destino.alignment = copy(origem.alignment)
             destino.protection = copy(origem.protection)
-            destino.number_format = origem.number_format
+            destino.number_format = copy(origem.number_format)
+
+    # ---------------------------------
+    # Limpar toda a linha
+    # ---------------------------------
+
+    for col in range(1, ws.max_column + 1):
+
+        ws.cell(
+            row=nova_linha,
+            column=col
+        ).value = None
 
     # ---------------------------------
     # Escrever campos manuais
@@ -278,20 +297,21 @@ def criar_projeto(ficheiro, dados_projeto):
 
         nome = campo["campo"]
 
-        if nome in dados_projeto:
+        if nome not in dados_projeto:
+            continue
 
-            valor = dados_projeto[nome]
+        valor = dados_projeto[nome]
 
-            if nome == "TaxaPenetracao":
-                valor = valor / 100
+        if nome == "TaxaPenetracao":
+            valor = valor / 100
 
-            ws.cell(
-                row=nova_linha,
-                column=campo["coluna"]
-            ).value = valor
+        ws.cell(
+            row=nova_linha,
+            column=campo["coluna"]
+        ).value = valor
 
     # ---------------------------------
-    # Escrever fórmulas automáticas
+    # Escrever fórmulas
     # ---------------------------------
 
     for coluna, formula in FORMULAS.items():
@@ -304,5 +324,4 @@ def criar_projeto(ficheiro, dados_projeto):
     wb.save(temp.name)
 
     return temp.name
-
 
