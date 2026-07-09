@@ -184,31 +184,56 @@ for campo in CAMPOS:
 
         )
 
-    # ----------------------------
-    # NÚMERO
-    # ----------------------------
+# ----------------------------
+# INTEIRO
+# ----------------------------
 
-    elif campo["tipo"] == "numero":
+elif campo["tipo"] == "int":
 
-        if valor is None:
+    if valor is None:
+        valor = 0
 
-            valor = 0
+    try:
+        valor = int(valor)
+    except:
+        valor = 0
 
-        try:
+    dados[campo["campo"]] = st.number_input(
 
-            valor = float(valor)
+        campo["nome"],
 
-        except:
+        value=valor,
 
-            valor = 0
+        step=1,
 
-        dados[campo["campo"]] = st.number_input(
+        format="%d"
 
-            campo["nome"],
+    )
+# ----------------------------
+# DECIMAL
+# ----------------------------
 
-            value=valor
+elif campo["tipo"] == "float":
 
-        )
+    if valor is None:
+        valor = 0.0
+
+    try:
+        valor = float(valor)
+    except:
+        valor = 0.0
+
+    dados[campo["campo"]] = st.number_input(
+
+        campo["nome"],
+
+        value=valor,
+
+        step=0.01,
+
+        format="%.2f"
+
+    )
 
     # ----------------------------
     # LISTA
