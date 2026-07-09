@@ -288,7 +288,7 @@ def criar_projeto(ficheiro, dados_projeto):
             row=nova_linha,
             column=coluna
         ).value = formula.format(r=nova_linha)
-    ws[f"S{nova_linha}"] = f"=Q{nova_linha}+R{nova_linha}"
+
     wb.save(temp.name)
 
     return temp.name
