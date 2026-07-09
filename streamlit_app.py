@@ -330,6 +330,100 @@ with tab_editar:
 
 with tab_nova:
 
-    st.info(
-        "Em construção."
-    )
+    st.header("Nova Obra")
+
+    dados_novos = {}
+
+    secao_atual = None
+
+    for campo in CAMPOS:
+
+        if not campo["editavel"]:
+            continue
+
+        if campo["secao"] != secao_atual:
+
+            secao_atual = campo["secao"]
+
+            st.subheader(secao_atual)
+
+        # ----------------------------
+        # TEXTO
+        # ----------------------------
+
+        if campo["tipo"] == "texto":
+
+            dados_novos[campo["campo"]] = st.text_input(
+
+                campo["nome"],
+
+                value="",
+
+                key="novo_" + campo["campo"]
+
+            )
+
+        # ----------------------------
+        # INTEIRO
+        # ----------------------------
+
+        elif campo["tipo"] == "int":
+
+            dados_novos[campo["campo"]] = st.number_input(
+
+                campo["nome"],
+
+                value=0,
+
+                step=1,
+
+                format="%d",
+
+                key="novo_" + campo["campo"]
+
+            )
+
+        # ----------------------------
+        # FLOAT
+        # ----------------------------
+
+        elif campo["tipo"] == "float":
+
+            dados_novos[campo["campo"]] = st.number_input(
+
+                campo["nome"],
+
+                value=0.0,
+
+                step=0.01,
+
+                format="%.2f",
+
+                key="novo_" + campo["campo"]
+
+            )
+
+        # ----------------------------
+        # LISTA
+        # ----------------------------
+
+        elif campo["tipo"] == "lista":
+
+            dados_novos[campo["campo"]] = st.selectbox(
+
+                campo["nome"],
+
+                campo["opcoes"],
+
+                key="novo_" + campo["campo"]
+
+            )
+
+    st.divider()
+
+    if st.button(
+        "➕ Criar Obra",
+        use_container_width=True
+    ):
+
+        st.info("Ainda não implementado.")
