@@ -1,88 +1,138 @@
 import streamlit as st
+import openpyxl
+import tempfile
+
 from dados import ESTADOS
 from excel import (
     ler_recenseamentos,
     pesquisar_projetos,
-    guardar_estado
+    guardar_estado,
+    procurar_linha_projeto,
+    ler_projeto
+)
 
 # --------------------------
 # INTERFACE
 # --------------------------
 
-st.title(
-    "Gestão de Recenseamentos"
-)
-
+st.title("Gestão de Recenseamentos")
 
 ficheiro = st.file_uploader(
     "Escolher ficheiro Excel",
     type=["xlsm"]
 )
 
-
 if ficheiro is not None:
 
     try:
 
-        projetos = ler_recenseamentos(
-            ficheiro
-        )
+        projetos = ler_recenseamentos(ficheiro)
 
         st.success(
             f"{len(projetos)} projetos carregados."
         )
 
+        # --------------------------
+        # Pesquisa
+        # --------------------------
 
-        # BARRA DE PESQUISA
         pesquisa = st.text_input(
             "Pesquisar projeto:"
         )
 
-
         if pesquisa.strip() != "":
-
             resultados = pesquisar_projetos(
                 projetos,
                 pesquisa
             )
-
         else:
-
             resultados = projetos
-
-
 
         st.dataframe(
             resultados,
             use_container_width=True
         )
 
-
         if len(resultados) > 0:
-
 
             escolha = st.selectbox(
                 "Escolha o projeto:",
                 resultados["RefObra"].astype(str)
             )
 
+            # --------------------------
+            # Abrir Excel
+            # --------------------------
 
-            novo_estado = st.selectbox(
-                "Novo Estado:",
-                ESTADOS
+            temp = tempfile.NamedTemporaryFile(
+                delete=False,
+                suffix=".xlsm"
             )
 
+            temp.write(
+                ficheiro.getvalue()
+            )
 
-            if st.button(
-                "Guardar Estado"
-            ):
+            temp.close()
+
+            wb = openpyxl.load_workbook(
+                temp.name,
+                keep_vba=True
+            )
+
+            ws = wb["Recenseamentos"]
+
+            linha = procurar_linha_projeto(
+                ws,
+                escolha
+            )
+
+            projeto = ler_projeto(
+                ws,
+                linha
+            )
+
+            # --------------------------
+            # Dados da obra
+            # --------------------------
+
+            st.subheader("Dados da Obra")
+
+            concelho = st.text_input(
+                "Concelho",
+                value=projeto["Concelho"]
+            )
+
+            estado = st.selectbox(
+                "Estado",
+                ESTADOS,
+                index=ESTADOS.index(projeto["Estado"])
+                if projeto["Estado"] in ESTADOS else 0
+            )
+
+            rua = st.text_input(
+                "Rua",
+                value=projeto["Rua"]
+            )
+
+            numero = st.text_input(
+                "Nº Polícia",
+                value=projeto["NumeroPolicia"]
+                if projeto["NumeroPolicia"] is not None
+                else ""
+            )
+
+            # --------------------------
+            # Alterar estado (funcionalidade atual)
+            # --------------------------
+
+            if st.button("Guardar Estado"):
 
                 novo_ficheiro = guardar_estado(
                     ficheiro,
                     escolha,
-                    novo_estado
+                    estado
                 )
-
 
                 with open(novo_ficheiro, "rb") as f:
 
@@ -91,7 +141,6 @@ if ficheiro is not None:
                         f,
                         file_name="SPRD_atualizado.xlsm"
                     )
-
 
                 st.success(
                     "Estado atualizado!"
@@ -102,7 +151,6 @@ if ficheiro is not None:
             st.warning(
                 "Nenhum projeto encontrado."
             )
-
 
     except Exception as e:
 
