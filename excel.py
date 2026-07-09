@@ -219,51 +219,57 @@ def criar_projeto(ficheiro, dados_projeto):
 
     ws = wb["Recenseamentos"]
 
-    ultima_linha = ws.max_row
+    # ---------------------------------
+    # Encontrar a última obra existente
+    # ---------------------------------
+
+    ultima_linha = 5
+
+    for linha in range(6, ws.max_row + 1):
+
+        if ws.cell(row=linha, column=3).value not in (None, ""):
+            ultima_linha = linha
+
     nova_linha = ultima_linha + 1
-    
+
+    # ---------------------------------
     # Copiar altura da linha
-    ws.row_dimensions[nova_linha].height = \
-        ws.row_dimensions[ultima_linha].height
+    # ---------------------------------
 
-    # Copiar todas as células
-    for col in range(1, ws.max_column + 1):
+    if ultima_linha >= 6:
+        ws.row_dimensions[nova_linha].height = \
+            ws.row_dimensions[ultima_linha].height
 
-        origem = ws.cell(
-            row=ultima_linha,
-            column=col
-        )
+    # ---------------------------------
+    # Copiar conteúdo e formatação
+    # ---------------------------------
 
-        destino = ws.cell(
-            row=nova_linha,
-            column=col
-        )
+    if ultima_linha >= 6:
 
-        # -----------------------------
-        # Valor / Fórmula
-        # -----------------------------
+        for col in range(1, ws.max_column + 1):
 
-        # Copiar apenas o valor (as fórmulas serão escritas depois)
+            origem = ws.cell(
+                row=ultima_linha,
+                column=col
+            )
 
-        destino.value = origem.value
+            destino = ws.cell(
+                row=nova_linha,
+                column=col
+            )
 
-        # -----------------------------
-        # Estilos
-        # -----------------------------
+            destino.value = origem.value
 
-        destino.font = copy(origem.font)
-        destino.fill = copy(origem.fill)
-        destino.border = copy(origem.border)
-        destino.alignment = copy(origem.alignment)
-        destino.protection = copy(origem.protection)
-        destino.number_format = origem.number_format
+            destino.font = copy(origem.font)
+            destino.fill = copy(origem.fill)
+            destino.border = copy(origem.border)
+            destino.alignment = copy(origem.alignment)
+            destino.protection = copy(origem.protection)
+            destino.number_format = origem.number_format
 
-    # Copiar largura das colunas (opcional)
-    # As larguras pertencem às colunas, por isso não é necessário.
-
-    # -----------------------------
+    # ---------------------------------
     # Escrever campos manuais
-    # -----------------------------
+    # ---------------------------------
 
     for campo in CAMPOS:
 
@@ -273,20 +279,20 @@ def criar_projeto(ficheiro, dados_projeto):
         nome = campo["campo"]
 
         if nome in dados_projeto:
-            
+
             valor = dados_projeto[nome]
 
             if nome == "TaxaPenetracao":
                 valor = valor / 100
-            
+
             ws.cell(
                 row=nova_linha,
                 column=campo["coluna"]
             ).value = valor
 
-    # -----------------------------
+    # ---------------------------------
     # Escrever fórmulas automáticas
-    # -----------------------------
+    # ---------------------------------
 
     for coluna, formula in FORMULAS.items():
 
