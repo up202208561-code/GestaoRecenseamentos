@@ -116,12 +116,19 @@ if ficheiro is not None:
                 value=projeto["Rua"]
             )
 
-            numero = st.text_input(
-                "Nº Polícia",
-                value=projeto["NumeroPolicia"]
-                if projeto["NumeroPolicia"] is not None
-                else ""
-            )
+            numero_inicial = st.text_input(
+    "Nº polícia inicial",
+    value=projeto["NumeroInicial"]
+    if projeto["NumeroInicial"] is not None
+    else ""
+)
+
+numero_final = st.text_input(
+    "Nº polícia final",
+    value=projeto["NumeroFinal"]
+    if projeto["NumeroFinal"] is not None
+    else ""
+)
 
             # --------------------------
             # Alterar estado (funcionalidade atual)
