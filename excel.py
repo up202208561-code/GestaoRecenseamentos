@@ -115,6 +115,10 @@ def ler_projeto(ws, linha):
     projeto = {}
 
     for campo in CAMPOS:
+        valor = dados_projeto[nome]
+
+        if nome == "TaxaPenetracao":
+            valor = valor*100
 
         projeto[campo["campo"]] = ws.cell(
             row=linha,
