@@ -23,7 +23,7 @@ def ler_recenseamentos(ficheiro):
     projetos = pd.DataFrame()
 
     for campo in CAMPOS:
-        projetos[campo["nome"]] = dados.iloc[:, campo["coluna"] - 1]
+        projetos[campo["campo"]] = dados.iloc[:, campo["coluna"] - 1]
 
     projetos = projetos.dropna(subset=["RefObra"])
 
@@ -114,7 +114,7 @@ def ler_projeto(ws, linha):
 
     for campo in CAMPOS:
 
-        projeto[campo["nome"]] = ws.cell(
+        projeto[campo["campo"]] = ws.cell(
             row=linha,
             column=campo["coluna"]
         ).value
@@ -163,7 +163,7 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
         if not campo["editavel"]:
             continue
 
-        nome = campo["nome"]
+        nome = campo["campo"]
 
         if nome in dados_projeto:
 
