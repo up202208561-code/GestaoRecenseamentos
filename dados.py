@@ -66,7 +66,7 @@ CAMPOS = [
         "nome": "Nº polícia inicial",
         "campo": "NumeroInicial",
         "coluna": 6,
-        "tipo": "int",
+        "tipo": "texto",
         "editavel": True
     },
 
@@ -75,7 +75,7 @@ CAMPOS = [
         "nome": "Nº polícia final",
         "campo": "NumeroFinal",
         "coluna": 7,
-        "tipo": "int",
+        "tipo": "texto",
         "editavel": True
     },
 
