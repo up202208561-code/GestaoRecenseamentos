@@ -183,7 +183,7 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
             ws.cell(
                 row=linha,
                 column=campo["coluna"]
-            ).value = dados_projeto[nome]
+            ).value = valor
 
     wb.save(temp.name)
 
@@ -276,7 +276,7 @@ def criar_projeto(ficheiro, dados_projeto):
             ws.cell(
                 row=nova_linha,
                 column=campo["coluna"]
-            ).value = dados_projeto[nome]
+            ).value = valor
 
     # -----------------------------
     # Escrever fórmulas automáticas
