@@ -41,15 +41,22 @@ if "mensagem" in st.session_state:
 
 # Guardar Excel em memória durante a sessão
 
+import hashlib
+
 conteudo = ficheiro.getvalue()
-hash_ficheiro = hashlib.md5(conteudo).hexdigest()
+
+identificador = (
+    ficheiro.name,
+    ficheiro.size,
+    hashlib.md5(conteudo).hexdigest()
+)
 
 if (
-    "excel_atual" not in st.session_state
-    or st.session_state.get("hash_ficheiro") != hash_ficheiro
+    "identificador_ficheiro" not in st.session_state
+    or st.session_state["identificador_ficheiro"] != identificador
 ):
     st.session_state["excel_atual"] = conteudo
-    st.session_state["hash_ficheiro"] = hash_ficheiro
+    st.session_state["identificador_ficheiro"] = identificador
 
     
 
