@@ -117,8 +117,7 @@ with tab_editar:
 
         escolha = st.selectbox(
             "Projeto",
-            resultados["RefObra"].astype(str),
-            key="selecionar_projeto"
+            resultados["RefObra"].astype(str).tolist()
         )
 
         # -------------------------------------------------
