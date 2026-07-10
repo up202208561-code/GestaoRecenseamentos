@@ -36,6 +36,10 @@ ficheiro = st.file_uploader(
 if ficheiro is None:
     st.stop()
 
+if "mensagem" in st.session_state:
+    st.success(st.session_state["mensagem"])
+    del st.session_state["mensagem"]
+
 # Guardar Excel em memória durante a sessão
 
 if (
@@ -226,7 +230,6 @@ with tab_editar:
                     escolha,
                     dados
                 )
-
                 st.session_state["excel_atual"] = novo_ficheiro
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
