@@ -62,7 +62,7 @@ def pesquisar_projetos(projetos, texto):
     ]
 
 
-def guardar_estado(ficheiro, ref_obra, novo_estado):
+def guardar_estado(excel_bytes, ref_obra, novo_estado):
     """
     Atualiza o estado de uma obra.
     """
