@@ -5,13 +5,17 @@ import tempfile
 from copy import copy
 from formulas import FORMULAS
 from dados import CAMPOS
+from io import BytesIO
 
 
 def ler_recenseamentos(ficheiro):
+
     """
     Lê a folha Recenseamentos e devolve um DataFrame
-    com os campos definidos em CAMPOS.
     """
+
+    if isinstance(ficheiro, bytes):
+        ficheiro = BytesIO(ficheiro)
 
     dados = pd.read_excel(
         ficheiro,
@@ -19,7 +23,6 @@ def ler_recenseamentos(ficheiro):
         header=None
     )
 
-    # Ignorar cabeçalhos (linhas 1 a 5)
     dados = dados.iloc[5:]
 
     projetos = pd.DataFrame()
@@ -193,7 +196,8 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
 
     wb.save(temp.name)
 
-    return temp.name
+    with open(temp.name, "rb") as f:
+        return f.read()
 
 def criar_projeto(excel_bytes, dados_projeto):
     """
@@ -323,5 +327,6 @@ def criar_projeto(excel_bytes, dados_projeto):
 
     wb.save(temp.name)
 
-    return temp.name
+    with open(temp.name, "rb") as f:
+        return f.read()
 
