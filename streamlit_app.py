@@ -229,17 +229,6 @@ else:
         except Exception as e:
             st.error(f"Erro ao guardar: {e}")
 
-    # -------------------------------------------------
-    # ESCOLHER PROJETO
-    # -------------------------------------------------
-
-    escolha = st.selectbox(
-
-        "Projeto",
-
-        resultados["RefObra"].astype(str)
-
-    )
 
     # -------------------------------------------------
     # ABRIR EXCEL
