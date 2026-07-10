@@ -42,18 +42,12 @@ if "mensagem" in st.session_state:
 
 # Guardar Excel em memória durante a sessão
 
-conteudo = ficheiro.getvalue()
-
 if (
     "excel_atual" not in st.session_state
-    or conteudo != st.session_state["excel_atual"]
     or st.session_state.get("nome_ficheiro") != ficheiro.name
 ):
-    st.session_state["excel_atual"] = conteudo
     st.session_state["excel_atual"] = ficheiro.getvalue()
     st.session_state["nome_ficheiro"] = ficheiro.name
-
-
 
 tab_editar, tab_nova = st.tabs(
     [
@@ -68,12 +62,12 @@ tab_editar, tab_nova = st.tabs(
 
 with tab_editar:
 
-
     # -------------------------------------------------
     # LER LISTA DE PROJETOS
     # -------------------------------------------------
 
     try:
+
         projetos = ler_recenseamentos(
             st.session_state["excel_atual"]
         )
@@ -112,23 +106,24 @@ with tab_editar:
     )
 
     if resultados.empty:
+
         st.warning("Nenhum projeto encontrado.")
 
     else:
 
-    # -------------------------------------------------
-    # ESCOLHER PROJETO
-    # -------------------------------------------------
+        # -------------------------------------------------
+        # ESCOLHER PROJETO
+        # -------------------------------------------------
 
         escolha = st.selectbox(
             "Projeto",
-             resultados["RefObra"].astype(str),
-             key="selecionar_projeto"
+            resultados["RefObra"].astype(str),
+            key="selecionar_projeto"
         )
 
-    # -------------------------------------------------
-    # ABRIR EXCEL
-    # -------------------------------------------------
+        # -------------------------------------------------
+        # ABRIR EXCEL
+        # -------------------------------------------------
 
         wb = abrir_excel(
             st.session_state["excel_atual"]
@@ -146,9 +141,9 @@ with tab_editar:
             linha
         )
 
-    # -------------------------------------------------
-    # FORMULÁRIO
-    # -------------------------------------------------
+        # -------------------------------------------------
+        # FORMULÁRIO
+        # -------------------------------------------------
 
         st.divider()
         st.header("Dados da Obra")
@@ -163,7 +158,9 @@ with tab_editar:
                 continue
 
             if campo["secao"] != secao_atual:
+
                 secao_atual = campo["secao"]
+
                 st.subheader(secao_atual)
 
             valor = projeto.get(campo["campo"])
@@ -237,7 +234,9 @@ with tab_editar:
                 st.session_state["excel_atual"] = novo_ficheiro
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
+
                 st.session_state["upload_key"] += 1
+
                 st.rerun()
 
             except Exception as e:
@@ -274,13 +273,9 @@ with tab_nova:
         if campo["tipo"] == "texto":
 
             dados_novos[campo["campo"]] = st.text_input(
-
                 campo["nome"],
-
                 value="",
-
                 key="novo_" + campo["campo"]
-
             )
 
         # ----------------------------
@@ -290,17 +285,11 @@ with tab_nova:
         elif campo["tipo"] == "int":
 
             dados_novos[campo["campo"]] = st.number_input(
-
                 campo["nome"],
-
                 value=0,
-
                 step=1,
-
                 format="%d",
-
                 key="novo_" + campo["campo"]
-
             )
 
         # ----------------------------
@@ -310,17 +299,11 @@ with tab_nova:
         elif campo["tipo"] == "float":
 
             dados_novos[campo["campo"]] = st.number_input(
-
                 campo["nome"],
-
                 value=0.0,
-
                 step=0.01,
-
                 format="%.2f",
-
                 key="novo_" + campo["campo"]
-
             )
 
         # ----------------------------
@@ -330,13 +313,9 @@ with tab_nova:
         elif campo["tipo"] == "lista":
 
             dados_novos[campo["campo"]] = st.selectbox(
-
                 campo["nome"],
-
                 campo["opcoes"],
-
                 key="novo_" + campo["campo"]
-
             )
 
     st.divider()
@@ -360,12 +339,15 @@ with tab_nova:
             st.session_state["excel_atual"] = novo_ficheiro
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
+
             st.session_state["upload_key"] += 1
-            st.rerun() 
+
+            st.rerun()
 
         except Exception as e:
 
             st.error(f"Erro: {e}")
+
 st.divider()
 
 st.download_button(
