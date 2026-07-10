@@ -88,8 +88,8 @@ with tab_editar:
     )
 
     if resultados.empty:
-    st.warning("Nenhum projeto encontrado.")
-    st.stop()
+        st.warning("Nenhum projeto encontrado.")
+        st.stop()
 
     # TODO:
     # daqui para baixo fica TODO o código da edição:
