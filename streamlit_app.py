@@ -236,7 +236,7 @@ with tab_editar:
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
                 
-                #st.rerun()
+                st.rerun()
 
             except Exception as e:
                 st.error(f"Erro ao guardar: {e}")
@@ -359,7 +359,7 @@ with tab_nova:
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
             
-            #st.rerun() 
+            st.rerun() 
 
         except Exception as e:
 
