@@ -25,10 +25,13 @@ st.set_page_config(
 
 st.title("Gestão de Recenseamentos")
 
+if "upload_key" not in st.session_state:
+    st.session_state["upload_key"] = 0
 
 ficheiro = st.file_uploader(
     "Escolher ficheiro Excel",
-    type=["xlsm"]
+    type=["xlsm"],
+    key=f"upload_{st.session_state['upload_key']}"
 )
 
 if ficheiro is None:
@@ -45,10 +48,9 @@ conteudo = ficheiro.getvalue()
 
 if (
     "excel_atual" not in st.session_state
-    or st.session_state.get("hash_ficheiro") != hash(conteudo)
+    or st.session_state["excel_atual"] != conteudo
 ):
     st.session_state["excel_atual"] = conteudo
-    st.session_state["hash_ficheiro"] = hash(conteudo)
 
     
 
@@ -234,7 +236,7 @@ with tab_editar:
                 st.session_state["excel_atual"] = novo_ficheiro
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
-                
+                st.session_state["upload_key"] += 1
                 st.rerun()
 
             except Exception as e:
@@ -357,7 +359,7 @@ with tab_nova:
             st.session_state["excel_atual"] = novo_ficheiro
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
-            
+            st.session_state["upload_key"] += 1
             st.rerun() 
 
         except Exception as e:
