@@ -25,6 +25,8 @@ st.set_page_config(
 
 st.title("Gestão de Recenseamentos")
 
+if "upload_key" not in st.session_state:
+    st.session_state["upload_key"] = 0
 
 ficheiro = st.file_uploader(
     "Escolher ficheiro Excel",
@@ -34,16 +36,24 @@ ficheiro = st.file_uploader(
 if ficheiro is None:
     st.stop()
 
+if "mensagem" in st.session_state:
+    st.success(st.session_state["mensagem"])
+    del st.session_state["mensagem"]
+
 # Guardar Excel em memória durante a sessão
+
+conteudo = ficheiro.getvalue()
 
 if (
     "excel_atual" not in st.session_state
+    or conteudo != st.session_state["excel_atual"]
     or st.session_state.get("nome_ficheiro") != ficheiro.name
 ):
+    st.session_state["excel_atual"] = conteudo
     st.session_state["excel_atual"] = ficheiro.getvalue()
     st.session_state["nome_ficheiro"] = ficheiro.name
 
-    
+
 
 tab_editar, tab_nova = st.tabs(
     [
@@ -341,7 +351,7 @@ with tab_nova:
             st.stop()
 
         try:
-            
+
             novo_ficheiro = criar_projeto(
                 st.session_state["excel_atual"],
                 dados_novos
@@ -357,7 +367,7 @@ with tab_nova:
 
             st.error(f"Erro: {e}")
 st.divider()
-        
+
 st.download_button(
     "📥 Descarregar Excel atualizado",
     data=st.session_state["excel_atual"],
