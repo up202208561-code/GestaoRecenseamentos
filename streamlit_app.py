@@ -33,6 +33,9 @@ ficheiro = st.file_uploader(
     type=["xlsm"]
 )
 
+if ficheiro is None:
+    st.stop()
+
 conteudo = ficheiro.getvalue()
 
 if (
@@ -40,9 +43,6 @@ if (
     or conteudo != st.session_state["excel_atual"]
 ):
     st.session_state["excel_atual"] = conteudo
-
-if ficheiro is None:
-    st.stop()
 
 if "mensagem" in st.session_state:
     st.success(st.session_state["mensagem"])
