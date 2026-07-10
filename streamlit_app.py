@@ -67,7 +67,7 @@ with tab_editar:
     # -------------------------------------------------
 
     try:
-
+        st.write("Bytes em memória:", len(st.session_state["excel_atual"]))
         projetos = ler_recenseamentos(
             st.session_state["excel_atual"]
         )
@@ -232,7 +232,7 @@ with tab_editar:
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
                 
-                st.rerun()
+                #st.rerun()
 
             except Exception as e:
                 st.error(f"Erro ao guardar: {e}")
@@ -355,7 +355,7 @@ with tab_nova:
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
             
-            st.rerun() 
+            #st.rerun() 
 
         except Exception as e:
 
