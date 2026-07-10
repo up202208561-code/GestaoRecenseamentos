@@ -30,27 +30,23 @@ if "upload_key" not in st.session_state:
 
 ficheiro = st.file_uploader(
     "Escolher ficheiro Excel",
-    type=["xlsm"],
-    key=f"upload_{st.session_state['upload_key']}"
+    type=["xlsm"]
 )
 
 if ficheiro is None:
     st.stop()
-    
+
 if "mensagem" in st.session_state:
     st.success(st.session_state["mensagem"])
     del st.session_state["mensagem"]
 
-
 # Guardar Excel em memória durante a sessão
-
-conteudo = ficheiro.getvalue()
-
 if (
     "excel_atual" not in st.session_state
-    or st.session_state["excel_atual"] != conteudo
+    or st.session_state.get("nome_ficheiro") != ficheiro.name
 ):
-    st.session_state["excel_atual"] = conteudo
+    st.session_state["excel_atual"] = ficheiro.getvalue()
+    st.session_state["nome_ficheiro"] = ficheiro.name
 
     
 
