@@ -98,7 +98,8 @@ else:
 
     escolha = st.selectbox(
         "Projeto",
-        resultados["RefObra"].astype(str)
+        resultados["RefObra"].astype(str),
+        key="selecionar_projeto"
     )
 
     # -------------------------------------------------
@@ -156,7 +157,8 @@ else:
 
             dados[campo["campo"]] = st.text_input(
                 campo["nome"],
-                value="" if valor is None else str(valor)
+                value="" if valor is None else str(valor),
+                key="editar_" + campo["campo"]
             )
 
         elif campo["tipo"] == "int":
@@ -170,7 +172,8 @@ else:
                 campo["nome"],
                 value=valor,
                 step=1,
-                format="%d"
+                format="%d",
+                key="editar_" + campo["campo"]
             )
 
         elif campo["tipo"] == "float":
@@ -184,7 +187,8 @@ else:
                 campo["nome"],
                 value=valor,
                 step=0.01,
-                format="%.2f"
+                format="%.2f",
+                key="editar_" + campo["campo"]
             )
 
         elif campo["tipo"] == "lista":
@@ -196,7 +200,8 @@ else:
             dados[campo["campo"]] = st.selectbox(
                 campo["nome"],
                 opcoes,
-                index=indice
+                index=indice,
+                key="editar_" + campo["campo"]
             )
 
     st.divider()
@@ -229,222 +234,6 @@ else:
         except Exception as e:
             st.error(f"Erro ao guardar: {e}")
 
-
-    # -------------------------------------------------
-    # ABRIR EXCEL
-    # -------------------------------------------------
-
-    temp = tempfile.NamedTemporaryFile(
-
-        delete=False,
-
-        suffix=".xlsm"
-
-    )
-
-    temp.write(
-
-        ficheiro.getvalue()
-
-    )
-
-    temp.close()
-
-    wb = openpyxl.load_workbook(
-
-        temp.name,
-
-        keep_vba=True
-
-    )
-
-    ws = wb["Recenseamentos"]
-
-    linha = procurar_linha_projeto(
-
-        ws,
-
-        escolha
-
-    )
-
-    projeto = ler_projeto(
-
-        ws,
-
-        linha
-
-    )
-
-    # -------------------------------------------------
-    # FORMULÁRIO
-    # -------------------------------------------------
-
-    st.divider()
-
-    st.header("Dados da Obra")
-
-    dados = {}
-
-    secao_atual = None
-
-    for campo in CAMPOS:
-
-        if not campo["editavel"]:
-            continue
-
-        if campo["secao"] != secao_atual:
-
-            secao_atual = campo["secao"]
-
-            st.subheader(secao_atual)
-
-        valor = projeto.get(
-
-            campo["campo"]
-
-        )
-
-        # ----------------------------
-        # TEXTO
-        # ----------------------------
-
-        if campo["tipo"] == "texto":
-
-            dados[campo["campo"]] = st.text_input(
-
-                campo["nome"],
-
-                value="" if valor is None else str(valor)
-
-            )
-
-        # ----------------------------
-        # INTEIRO
-        # ----------------------------
-
-        elif campo["tipo"] == "int":
-
-            if valor is None:
-                valor = 0
-
-            try:
-                valor = int(valor)
-            except:
-                valor = 0
-
-            dados[campo["campo"]] = st.number_input(
-
-                campo["nome"],
-
-                value=valor,
-
-                step=1,
-
-                format="%d"
-
-            )
-
-        # ----------------------------
-        # DECIMAL
-        # ----------------------------
-
-        elif campo["tipo"] == "float":
-
-            if valor is None:
-                valor = 0.0
-
-            try:
-                valor = float(valor)
-            except:
-                valor = 0.0
-
-            dados[campo["campo"]] = st.number_input(
-
-                campo["nome"],
-
-                value=valor,
-
-                step=0.01,
-
-                format="%.2f"
-
-            )
-
-        # ----------------------------
-        # LISTA
-        # ----------------------------
-
-        elif campo["tipo"] == "lista":
-
-            opcoes = campo["opcoes"]
-
-            if valor not in opcoes:
-                indice = 0
-            else:
-                indice = opcoes.index(valor)
-
-            dados[campo["campo"]] = st.selectbox(
-
-                campo["nome"],
-
-                opcoes,
-
-                index=indice
-
-            )
-
-    # -------------------------------------------------
-    # GUARDAR
-    # -------------------------------------------------
-
-    st.divider()
-
-    if st.button(
-        "💾 Guardar Projeto",
-        use_container_width=True
-    ):
-
-        try:
-
-            novo_ficheiro = guardar_projeto(
-
-                ficheiro,
-
-                escolha,
-
-                dados
-
-            )
-
-            st.success(
-                "Projeto atualizado com sucesso."
-            )
-
-            with open(
-                novo_ficheiro,
-                "rb"
-            ) as f:
-
-                st.download_button(
-
-                    "📥 Descarregar Excel atualizado",
-
-                    data=f,
-
-                    file_name="SPRD_atualizado.xlsm",
-
-                    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
-
-                    use_container_width=True
-
-                )
-
-        except Exception as e:
-
-            st.error(
-                f"Erro ao guardar: {e}"
-            )
 
 # =================================================
 # NOVA OBRA
