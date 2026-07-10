@@ -27,6 +27,9 @@ st.title("Gestão de Recenseamentos")
 
 if "nova_obra_id" not in st.session_state:
     st.session_state["nova_obra_id"] = 0
+    
+if "pagina" not in st.session_state:
+    st.session_state["pagina"] = "✏️ Editar Obra"
 
 if "upload_key" not in st.session_state:
     st.session_state["upload_key"] = 0
@@ -342,6 +345,8 @@ if pagina == "➕ Nova Obra":
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
 
             st.session_state["nova_obra_id"] += 1
+
+            st.session_state["pagina"] = "✏️ Editar Obra"
 
             st.rerun()
 
