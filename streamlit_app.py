@@ -88,30 +88,8 @@ with tab_editar:
     )
 
     if resultados.empty:
-
         st.warning("Nenhum projeto encontrado.")
-
-    else:
-    
-        escolha = st.selectbox(
-            "Projeto",
-            resultados["RefObra"].astype(str)
-        )
-
-    # daqui para baixo fica TODO o código da edição
-    # abrir workbook
-    # procurar linha
-    # ler projeto
-    # formulário
-    # botão guardar
-
-    # TODO:
-    # daqui para baixo fica TODO o código da edição:
-    # abrir workbook
-    # procurar linha
-    # ler projeto
-    # formulário
-    # botão guardar
+        st.stop()
 
     # -------------------------------------------------
     # ESCOLHER PROJETO
