@@ -39,15 +39,6 @@ ficheiro = st.file_uploader(
 if ficheiro is None:
     st.stop()
 
-st.write("ficheiro =", ficheiro)
-
-if ficheiro is not None:
-    st.write(type(ficheiro))
-    st.write("nome =", ficheiro.name)
-
-if "mensagem" in st.session_state:
-    st.success(st.session_state["mensagem"])
-    del st.session_state["mensagem"]
 
 # Guardar Excel em memória durante a sessão
 
