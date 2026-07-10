@@ -339,9 +339,12 @@ with tab_nova:
         use_container_width=True
     ):
 
+        if not dados_novos["RefObra"].strip():
+            st.error("O campo 'Ref. Obra' é obrigatório.")
+            st.stop()
+
         try:
-
-
+            
             novo_ficheiro = criar_projeto(
                 st.session_state["excel_atual"],
                 dados_novos
