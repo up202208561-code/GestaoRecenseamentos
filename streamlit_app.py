@@ -25,6 +25,9 @@ st.set_page_config(
 
 st.title("Gestão de Recenseamentos")
 
+if "nova_obra_id" not in st.session_state:
+    st.session_state["nova_obra_id"] = 0
+
 if "upload_key" not in st.session_state:
     st.session_state["upload_key"] = 0
 
@@ -273,7 +276,7 @@ with tab_nova:
             dados_novos[campo["campo"]] = st.text_input(
                 campo["nome"],
                 value="",
-                key="novo_" + campo["campo"]
+                key=f"novo_{st.session_state['nova_obra_id']}_{campo['campo']}"
             )
 
         # ----------------------------
@@ -287,7 +290,7 @@ with tab_nova:
                 value=0,
                 step=1,
                 format="%d",
-                key="novo_" + campo["campo"]
+                key=f"novo_{st.session_state['nova_obra_id']}_{campo['campo']}"
             )
 
         # ----------------------------
@@ -301,7 +304,7 @@ with tab_nova:
                 value=0.0,
                 step=0.01,
                 format="%.2f",
-                key="novo_" + campo["campo"]
+                key=f"novo_{st.session_state['nova_obra_id']}_{campo['campo']}"
             )
 
         # ----------------------------
@@ -313,7 +316,7 @@ with tab_nova:
             dados_novos[campo["campo"]] = st.selectbox(
                 campo["nome"],
                 campo["opcoes"],
-                key="novo_" + campo["campo"]
+                key=f"novo_{st.session_state['nova_obra_id']}_{campo['campo']}"
             )
 
     st.divider()
@@ -338,7 +341,7 @@ with tab_nova:
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
 
-            st.session_state["upload_key"] += 1
+            st.session_state["nova_obra_id"] += 1
 
             st.rerun()
 
