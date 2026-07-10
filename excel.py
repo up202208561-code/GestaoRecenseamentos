@@ -20,12 +20,10 @@ def abrir_excel(excel_bytes):
 
 def ler_recenseamentos(ficheiro):
 
-    """
-    Lê a folha Recenseamentos e devolve um DataFrame
-    """
-
     if isinstance(ficheiro, bytes):
         ficheiro = BytesIO(ficheiro)
+
+    ficheiro.seek(0)   # <- acrescenta esta linha
 
     dados = pd.read_excel(
         ficheiro,
@@ -42,6 +40,7 @@ def ler_recenseamentos(ficheiro):
 
     projetos = projetos.dropna(subset=["RefObra"])
 
+    print(projetos["RefObra"].tolist())
     return projetos
 
 
