@@ -39,6 +39,9 @@ ficheiro = st.file_uploader(
 if ficheiro is None:
     st.stop()
 
+st.write(type(ficheiro))
+st.write(dir(ficheiro))
+
 if "mensagem" in st.session_state:
     st.success(st.session_state["mensagem"])
     del st.session_state["mensagem"]
