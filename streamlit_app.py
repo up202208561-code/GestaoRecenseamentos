@@ -1,6 +1,7 @@
 import streamlit as st
 import openpyxl
 import tempfile
+import hashlib
 
 from dados import CAMPOS
 from excel import (
@@ -39,12 +40,16 @@ if "mensagem" in st.session_state:
 
 
 # Guardar Excel em memória durante a sessão
+
+conteudo = ficheiro.getvalue()
+hash_ficheiro = hashlib.md5(conteudo).hexdigest()
+
 if (
     "excel_atual" not in st.session_state
-    or st.session_state.get("nome_ficheiro") != ficheiro.name
+    or st.session_state.get("hash_ficheiro") != hash_ficheiro
 ):
-    st.session_state["excel_atual"] = ficheiro.getvalue()
-    st.session_state["nome_ficheiro"] = ficheiro.name
+    st.session_state["excel_atual"] = conteudo
+    st.session_state["hash_ficheiro"] = hash_ficheiro
 
     
 
