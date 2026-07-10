@@ -176,7 +176,7 @@ with tab_editar:
                     key="editar_" + campo["campo"]
                 )
 
-             elif campo["tipo"] == "float":
+            elif campo["tipo"] == "float":
 
                 try:
                     valor = float(valor or 0)
