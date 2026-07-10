@@ -306,6 +306,4 @@ def criar_projeto(excel_bytes, dados_projeto):
 
     wb.save(buffer)
 
-    print("max_row:", ws.max_row)
-    print("última referência:", ws.cell(row=ws.max_row, column=3).value)
     return buffer.getvalue()
