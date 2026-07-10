@@ -169,7 +169,7 @@ with tab_editar:
                 dados[campo["campo"]] = st.text_input(
                     campo["nome"],
                     value="" if valor is None else str(valor),
-                    key="editar_" + campo["campo"]
+                    key=f"editar_{escolha}_{campo['campo']}"
                 )
 
             elif campo["tipo"] == "int":
@@ -184,7 +184,7 @@ with tab_editar:
                     value=valor,
                     step=1,
                     format="%d",
-                    key="editar_" + campo["campo"]
+                    key=f"editar_{escolha}_{campo['campo']}"
                 )
 
             elif campo["tipo"] == "float":
@@ -199,7 +199,7 @@ with tab_editar:
                     value=valor,
                     step=0.01,
                     format="%.2f",
-                    key="editar_" + campo["campo"]
+                    key=f"editar_{escolha}_{campo['campo']}"
                 )
 
             elif campo["tipo"] == "lista":
@@ -212,7 +212,7 @@ with tab_editar:
                     campo["nome"],
                     opcoes,
                     index=indice,
-                    key="editar_" + campo["campo"]
+                    key=f"editar_{escolha}_{campo['campo']}"
                 )
 
         st.divider()
