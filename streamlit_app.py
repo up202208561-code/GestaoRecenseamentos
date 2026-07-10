@@ -342,12 +342,16 @@ with tab_nova:
 
         try:
 
+            st.write("Antes:", len(st.session_state["excel_atual"]))
+
             novo_ficheiro = criar_projeto(
                 st.session_state["excel_atual"],
                 dados_novos
             )
 
             st.session_state["excel_atual"] = novo_ficheiro
+
+            st.write("Depois:", len(st.session_state["excel_atual"]))
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
             
