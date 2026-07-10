@@ -32,6 +32,12 @@ ficheiro = st.file_uploader(
 if ficheiro is None:
     st.stop()
 
+
+# Guardar Excel em memória durante a sessão
+if "excel_atual" not in st.session_state:
+
+    st.session_state["excel_atual"] = ficheiro.getvalue()
+
 tab_editar, tab_nova = st.tabs(
     [
         "✏️ Editar Obra",
@@ -214,11 +220,13 @@ with tab_editar:
             try:
 
                 novo_ficheiro = guardar_projeto(
-                    ficheiro,
+                    st.session_state["excel_atual"],
                     escolha,
                     dados
                 )
 
+                st.session_state["excel_atual"] = novo_ficheiro
+                
                 st.success("Projeto atualizado com sucesso.")
 
                 with open(novo_ficheiro, "rb") as f:
@@ -340,10 +348,12 @@ with tab_nova:
         try:
 
             novo_ficheiro = criar_projeto(
-                ficheiro,
+                st.session_state["excel_atual"],
                 dados_novos
             )
 
+            st.session_state["excel_atual"] = novo_ficheiro
+            
             st.success("Obra criada com sucesso.")
 
             with open(novo_ficheiro, "rb") as f:
