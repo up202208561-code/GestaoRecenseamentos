@@ -42,11 +42,24 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
+import hashlib
+
+ficheiro = st.file_uploader(
+    "Escolher ficheiro Excel",
+    type=["xlsm"]
+)
+
+if ficheiro is None:
+    st.stop()
+
+novo_hash = hashlib.sha256(ficheiro.getvalue()).hexdigest()
+
 if (
     "excel_atual" not in st.session_state
-    or st.session_state.get("nome_ficheiro") != ficheiro.name
+    or st.session_state.get("hash_ficheiro") != novo_hash
 ):
     st.session_state["excel_atual"] = ficheiro.getvalue()
+    st.session_state["hash_ficheiro"] = novo_hash
     st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
