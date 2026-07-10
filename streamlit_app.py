@@ -3,6 +3,8 @@ import openpyxl
 import tempfile
 import hashlib
 
+
+
 from dados import CAMPOS
 from excel import (
     ler_recenseamentos,
@@ -41,12 +43,15 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
+conteudo = ficheiro.getvalue()
+hash_atual = hashlib.md5(conteudo).hexdigest()
+
 if (
-    "excel_atual" not in st.session_state
-    or st.session_state.get("nome_ficheiro") != ficheiro.name
+    "hash_ficheiro" not in st.session_state
+    or st.session_state["hash_ficheiro"] != hash_atual
 ):
-    st.session_state["excel_atual"] = ficheiro.getvalue()
-    st.session_state["nome_ficheiro"] = ficheiro.name
+    st.session_state["excel_atual"] = conteudo
+    st.session_state["hash_ficheiro"] = hash_atual
 
 pagina = st.radio(
     "",
