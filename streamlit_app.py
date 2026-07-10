@@ -67,7 +67,11 @@ if pagina == "✏️ Editar Obra":
     # -------------------------------------------------
 
     try:
+        import hashlib
 
+        st.write("Hash excel_atual:", hashlib.md5(st.session_state["excel_atual"]).hexdigest())
+        st.write("Hash upload:", hashlib.md5(ficheiro.getvalue()).hexdigest())
+        st.write("São iguais?", st.session_state["excel_atual"] == ficheiro.getvalue())
         projetos = ler_recenseamentos(
             st.session_state["excel_atual"]
         )
