@@ -36,12 +36,6 @@ ficheiro = st.file_uploader(
     type=["xlsm"]
 )
 
-st.write("Nome:", ficheiro.name)
-st.write("Tamanho:", ficheiro.size)
-
-conteudo = ficheiro.getvalue()
-st.write("Hash:", hash(conteudo))
-
 if ficheiro is None:
     st.stop()
 
