@@ -67,18 +67,7 @@ def guardar_estado(ficheiro, ref_obra, novo_estado):
     Atualiza o estado de uma obra.
     """
 
-    temp = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".xlsm"
-    )
-
-    temp.write(ficheiro.getvalue())
-    temp.close()
-
-    wb = openpyxl.load_workbook(
-        temp.name,
-        keep_vba=True
-    )
+    wb = abrir_excel(excel_bytes)
 
     ws = wb["Recenseamentos"]
 
@@ -98,9 +87,11 @@ def guardar_estado(ficheiro, ref_obra, novo_estado):
 
             break
 
-    wb.save(temp.name)
+    saida = BytesIO()
 
-    return temp.name
+    wb.save(saida)
+
+    return saida.getvalue()
     
 
 
@@ -153,21 +144,7 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
     }
     """
 
-    temp = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".xlsm"
-    )
-
-    temp.write(
-        excel_bytes
-    )
-
-    temp.close()
-
-    wb = openpyxl.load_workbook(
-        temp.name,
-        keep_vba=True
-    )
+    wb = abrir_excel(excel_bytes)
 
     ws = wb["Recenseamentos"]
 
@@ -204,10 +181,11 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
                 column=coluna
             ).value = formula.format(r=linha)
 
-    wb.save(temp.name)
+    buffer = BytesIO()
 
-    with open(temp.name, "rb") as f:
-        return f.read()
+    wb.save(buffer)
+
+    return buffer.getvalue()
 
 def criar_projeto(excel_bytes, dados_projeto):
     """
@@ -215,18 +193,7 @@ def criar_projeto(excel_bytes, dados_projeto):
     Se não existir nenhuma obra, utiliza a linha 6 como modelo.
     """
 
-    temp = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".xlsm"
-    )
-
-    temp.write(excel_bytes)
-    temp.close()
-
-    wb = openpyxl.load_workbook(
-        temp.name,
-        keep_vba=True
-    )
+    wb = abrir_excel(excel_bytes)
 
     ws = wb["Recenseamentos"]
 
@@ -335,8 +302,8 @@ def criar_projeto(excel_bytes, dados_projeto):
             column=coluna
         ).value = formula.format(r=nova_linha)
 
-    wb.save(temp.name)
+    buffer = BytesIO()
 
-    with open(temp.name, "rb") as f:
-        return f.read()
+    wb.save(buffer)
 
+    return buffer.getvalue()
