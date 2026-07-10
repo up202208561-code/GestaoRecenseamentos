@@ -52,18 +52,18 @@ if (
     st.session_state["excel_atual"] = ficheiro.getvalue()
     st.session_state["nome_ficheiro"] = ficheiro.name
 
-tab_editar, tab_nova = st.tabs(
-    [
-        "✏️ Editar Obra",
-        "➕ Nova Obra"
-    ]
+pagina = st.radio(
+    "",
+    ["✏️ Editar Obra", "➕ Nova Obra"],
+    horizontal=True,
+    key="pagina"
 )
 
 # =================================================
 # EDITAR OBRA
 # =================================================
 
-with tab_editar:
+if pagina == "✏️ Editar Obra":
 
     # -------------------------------------------------
     # LER LISTA DE PROJETOS
@@ -248,7 +248,7 @@ with tab_editar:
 # NOVA OBRA
 # =================================================
 
-with tab_nova:
+if pagina == "➕ Nova Obra":
 
     st.header("Nova Obra")
 
