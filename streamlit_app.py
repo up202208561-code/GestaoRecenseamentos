@@ -67,13 +67,9 @@ with tab_editar:
     # -------------------------------------------------
 
     try:
-        st.write("Bytes em memória:", len(st.session_state["excel_atual"]))
         projetos = ler_recenseamentos(
             st.session_state["excel_atual"]
         )
-
-        st.write("Número de projetos:", len(projetos))
-        st.write(projetos.tail())
 
     except Exception as e:
 
@@ -345,7 +341,6 @@ with tab_nova:
 
         try:
 
-            st.write("Antes:", len(st.session_state["excel_atual"]))
 
             novo_ficheiro = criar_projeto(
                 st.session_state["excel_atual"],
@@ -353,8 +348,6 @@ with tab_nova:
             )
 
             st.session_state["excel_atual"] = novo_ficheiro
-
-            st.write("Depois:", len(st.session_state["excel_atual"]))
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
             
