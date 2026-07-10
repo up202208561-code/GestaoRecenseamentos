@@ -36,18 +36,6 @@ ficheiro = st.file_uploader(
 if ficheiro is None:
     st.stop()
 
-conteudo = ficheiro.getvalue()
-
-if (
-    "excel_atual" not in st.session_state
-    or conteudo != st.session_state["excel_atual"]
-):
-    st.session_state["excel_atual"] = conteudo
-
-if "mensagem" in st.session_state:
-    st.success(st.session_state["mensagem"])
-    del st.session_state["mensagem"]
-
 # Guardar Excel em memória durante a sessão
 
 if (
