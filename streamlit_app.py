@@ -72,6 +72,9 @@ with tab_editar:
             st.session_state["excel_atual"]
         )
 
+        st.write("Número de projetos:", len(projetos))
+        st.write(projetos.tail())
+
     except Exception as e:
 
         st.error(e)
