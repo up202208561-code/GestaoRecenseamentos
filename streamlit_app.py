@@ -25,26 +25,11 @@ st.set_page_config(
 
 st.title("Gestão de Recenseamentos")
 
-if "upload_key" not in st.session_state:
-    st.session_state["upload_key"] = 0
 
-col1, col2 = st.columns([5, 1])
-
-with col1:
-    ficheiro = st.file_uploader(
-        "Escolher ficheiro Excel",
-        type=["xlsm"],
-        key=f"upload_{st.session_state['upload_key']}"
-    )
-
-with col2:
-    st.write("")
-    st.write("")
-    if st.button("📂 Novo"):
-        st.session_state.pop("excel_atual", None)
-        st.session_state.pop("nome_ficheiro", None)
-        st.session_state["upload_key"] += 1
-        st.rerun()
+ficheiro = st.file_uploader(
+    "Escolher ficheiro Excel",
+    type=["xlsm"]
+)
 
 if ficheiro is None:
     st.stop()
