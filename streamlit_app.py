@@ -119,7 +119,7 @@ with tab_editar:
             suffix=".xlsm"
         )
 
-        temp.write(ficheiro.getvalue())
+        temp.write(st.session_state["excel_atual"])
         temp.close()
 
         wb = openpyxl.load_workbook(
@@ -231,15 +231,13 @@ with tab_editar:
                 
                 st.success("Projeto atualizado com sucesso.")
 
-                with open(novo_ficheiro, "rb") as f:
-
-                    st.download_button(
-                        "📥 Descarregar Excel atualizado",
-                        data=f,
-                        file_name="SPRD_atualizado.xlsm",
-                        mime="application/vnd.ms-excel.sheet.macroEnabled.12",
-                        use_container_width=True
-                    )
+                st.download_button(
+                    "📥 Descarregar Excel atualizado",
+                    data=novo_ficheiro,
+                    file_name="SPRD_atualizado.xlsm",
+                    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
+                    use_container_width=True
+                )
 
             except Exception as e:
                 st.error(f"Erro ao guardar: {e}")
@@ -358,15 +356,15 @@ with tab_nova:
             
             st.success("Obra criada com sucesso.")
 
-            with open(novo_ficheiro, "rb") as f:
+            st.download_button(
+                "📥 Descarregar Excel atualizado",
+                data=novo_ficheiro,
+                file_name="SPRD_atualizado.xlsm",
+                mime="application/vnd.ms-excel.sheet.macroEnabled.12",
+                use_container_width=True
+            )
 
-                st.download_button(
-                    "📥 Descarregar Excel atualizado",
-                    data=f,
-                    file_name="SPRD_atualizado.xlsm",
-                    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
-                    use_container_width=True
-                )
+               
 
         except Exception as e:
 
