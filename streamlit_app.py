@@ -9,7 +9,8 @@ from excel import (
     procurar_linha_projeto,
     ler_projeto,
     guardar_projeto,
-    criar_projeto
+    criar_projeto,
+    abrir_excel
 )
 
 # -------------------------------------------------
@@ -114,17 +115,8 @@ with tab_editar:
     # ABRIR EXCEL
     # -------------------------------------------------
 
-        temp = tempfile.NamedTemporaryFile(
-            delete=False,
-            suffix=".xlsm"
-        )
-
-        temp.write(st.session_state["excel_atual"])
-        temp.close()
-
-        wb = openpyxl.load_workbook(
-            temp.name,
-            keep_vba=True
+        wb = abrir_excel(
+            st.session_state["excel_atual"]
         )
 
         ws = wb["Recenseamentos"]
