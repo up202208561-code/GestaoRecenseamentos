@@ -87,152 +87,152 @@ with tab_editar:
         use_container_width=True
     )
 
-if resultados.empty:
-    st.warning("Nenhum projeto encontrado.")
+    if resultados.empty:
+        st.warning("Nenhum projeto encontrado.")
 
-else:
+    else:
 
     # -------------------------------------------------
     # ESCOLHER PROJETO
     # -------------------------------------------------
 
-    escolha = st.selectbox(
-        "Projeto",
-        resultados["RefObra"].astype(str),
-        key="selecionar_projeto"
-    )
+        escolha = st.selectbox(
+            "Projeto",
+             resultados["RefObra"].astype(str),
+             key="selecionar_projeto"
+        )
 
     # -------------------------------------------------
     # ABRIR EXCEL
     # -------------------------------------------------
 
-    temp = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".xlsm"
-    )
+        temp = tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix=".xlsm"
+        )
 
-    temp.write(ficheiro.getvalue())
-    temp.close()
+        temp.write(ficheiro.getvalue())
+        temp.close()
 
-    wb = openpyxl.load_workbook(
-        temp.name,
-        keep_vba=True
-    )
+        wb = openpyxl.load_workbook(
+            temp.name,
+            keep_vba=True
+        )
 
-    ws = wb["Recenseamentos"]
+        ws = wb["Recenseamentos"]
 
-    linha = procurar_linha_projeto(
-        ws,
-        escolha
-    )
+        linha = procurar_linha_projeto(
+            ws,
+            escolha
+        )
 
-    projeto = ler_projeto(
-        ws,
-        linha
-    )
+        projeto = ler_projeto(
+            ws,
+            linha
+        )
 
     # -------------------------------------------------
     # FORMULÁRIO
     # -------------------------------------------------
 
-    st.divider()
-    st.header("Dados da Obra")
+        st.divider()
+        st.header("Dados da Obra")
 
-    dados = {}
+        dados = {}
 
-    secao_atual = None
+        secao_atual = None
 
-    for campo in CAMPOS:
+        for campo in CAMPOS:
 
-        if not campo["editavel"]:
-            continue
+            if not campo["editavel"]:
+                continue
 
-        if campo["secao"] != secao_atual:
-            secao_atual = campo["secao"]
-            st.subheader(secao_atual)
+            if campo["secao"] != secao_atual:
+                secao_atual = campo["secao"]
+                st.subheader(secao_atual)
 
-        valor = projeto.get(campo["campo"])
+            valor = projeto.get(campo["campo"])
 
-        if campo["tipo"] == "texto":
+            if campo["tipo"] == "texto":
 
-            dados[campo["campo"]] = st.text_input(
-                campo["nome"],
-                value="" if valor is None else str(valor),
-                key="editar_" + campo["campo"]
-            )
-
-        elif campo["tipo"] == "int":
-
-            try:
-                valor = int(valor or 0)
-            except:
-                valor = 0
-
-            dados[campo["campo"]] = st.number_input(
-                campo["nome"],
-                value=valor,
-                step=1,
-                format="%d",
-                key="editar_" + campo["campo"]
-            )
-
-        elif campo["tipo"] == "float":
-
-            try:
-                valor = float(valor or 0)
-            except:
-                valor = 0.0
-
-            dados[campo["campo"]] = st.number_input(
-                campo["nome"],
-                value=valor,
-                step=0.01,
-                format="%.2f",
-                key="editar_" + campo["campo"]
-            )
-
-        elif campo["tipo"] == "lista":
-
-            opcoes = campo["opcoes"]
-
-            indice = opcoes.index(valor) if valor in opcoes else 0
-
-            dados[campo["campo"]] = st.selectbox(
-                campo["nome"],
-                opcoes,
-                index=indice,
-                key="editar_" + campo["campo"]
-            )
-
-    st.divider()
-
-    if st.button(
-        "💾 Guardar Projeto",
-        use_container_width=True
-    ):
-
-        try:
-
-            novo_ficheiro = guardar_projeto(
-                ficheiro,
-                escolha,
-                dados
-            )
-
-            st.success("Projeto atualizado com sucesso.")
-
-            with open(novo_ficheiro, "rb") as f:
-
-                st.download_button(
-                    "📥 Descarregar Excel atualizado",
-                    data=f,
-                    file_name="SPRD_atualizado.xlsm",
-                    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
-                    use_container_width=True
+                dados[campo["campo"]] = st.text_input(
+                    campo["nome"],
+                    value="" if valor is None else str(valor),
+                    key="editar_" + campo["campo"]
                 )
 
-        except Exception as e:
-            st.error(f"Erro ao guardar: {e}")
+            elif campo["tipo"] == "int":
+
+                try:
+                    valor = int(valor or 0)
+                except:
+                    valor = 0
+
+                dados[campo["campo"]] = st.number_input(
+                    campo["nome"],
+                    value=valor,
+                    step=1,
+                    format="%d",
+                    key="editar_" + campo["campo"]
+                )
+
+             elif campo["tipo"] == "float":
+
+                try:
+                    valor = float(valor or 0)
+                except:
+                    valor = 0.0
+
+                dados[campo["campo"]] = st.number_input(
+                    campo["nome"],
+                    value=valor,
+                    step=0.01,
+                    format="%.2f",
+                    key="editar_" + campo["campo"]
+                )
+
+            elif campo["tipo"] == "lista":
+
+                opcoes = campo["opcoes"]
+
+                indice = opcoes.index(valor) if valor in opcoes else 0
+
+                dados[campo["campo"]] = st.selectbox(
+                    campo["nome"],
+                    opcoes,
+                    index=indice,
+                    key="editar_" + campo["campo"]
+                )
+
+        st.divider()
+
+        if st.button(
+            "💾 Guardar Projeto",
+            use_container_width=True
+        ):
+
+            try:
+
+                novo_ficheiro = guardar_projeto(
+                    ficheiro,
+                    escolha,
+                    dados
+                )
+
+                st.success("Projeto atualizado com sucesso.")
+
+                with open(novo_ficheiro, "rb") as f:
+
+                    st.download_button(
+                        "📥 Descarregar Excel atualizado",
+                        data=f,
+                        file_name="SPRD_atualizado.xlsm",
+                        mime="application/vnd.ms-excel.sheet.macroEnabled.12",
+                        use_container_width=True
+                    )
+
+            except Exception as e:
+                st.error(f"Erro ao guardar: {e}")
 
 
 # =================================================
