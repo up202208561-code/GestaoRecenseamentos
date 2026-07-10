@@ -58,7 +58,9 @@ with tab_editar:
 
     try:
 
-        projetos = ler_recenseamentos(ficheiro)
+        projetos = ler_recenseamentos(
+            st.session_state["excel_atual"]
+        )
 
     except Exception as e:
 
