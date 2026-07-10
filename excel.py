@@ -128,7 +128,7 @@ def ler_projeto(ws, linha):
 
     return projeto
 
-def guardar_projeto(ficheiro, ref_obra, dados_projeto):
+def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
     """
     Atualiza todos os campos editáveis de uma obra.
     dados_projeto é um dicionário:
@@ -146,7 +146,7 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
     )
 
     temp.write(
-        ficheiro.getvalue()
+        excel_bytes
     )
 
     temp.close()
@@ -195,7 +195,7 @@ def guardar_projeto(ficheiro, ref_obra, dados_projeto):
 
     return temp.name
 
-def criar_projeto(ficheiro, dados_projeto):
+def criar_projeto(excel_bytes, dados_projeto):
     """
     Cria uma nova obra mantendo fórmulas, estilos e formatação.
     Se não existir nenhuma obra, utiliza a linha 6 como modelo.
@@ -206,7 +206,7 @@ def criar_projeto(ficheiro, dados_projeto):
         suffix=".xlsm"
     )
 
-    temp.write(ficheiro.getvalue())
+    temp.write(excel_bytes)
     temp.close()
 
     wb = openpyxl.load_workbook(
