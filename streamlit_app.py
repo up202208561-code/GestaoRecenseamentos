@@ -33,6 +33,14 @@ ficheiro = st.file_uploader(
     type=["xlsm"]
 )
 
+conteudo = ficheiro.getvalue()
+
+if (
+    "excel_atual" not in st.session_state
+    or conteudo != st.session_state["excel_atual"]
+):
+    st.session_state["excel_atual"] = conteudo
+
 if ficheiro is None:
     st.stop()
 
