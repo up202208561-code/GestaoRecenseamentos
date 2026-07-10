@@ -32,12 +32,21 @@ ficheiro = st.file_uploader(
 
 if ficheiro is None:
     st.stop()
+    
+if "mensagem" in st.session_state:
+    st.success(st.session_state["mensagem"])
+    del st.session_state["mensagem"]
 
 
 # Guardar Excel em memória durante a sessão
-if "excel_atual" not in st.session_state:
-
+if (
+    "excel_atual" not in st.session_state
+    or st.session_state.get("nome_ficheiro") != ficheiro.name
+):
     st.session_state["excel_atual"] = ficheiro.getvalue()
+    st.session_state["nome_ficheiro"] = ficheiro.name
+
+    
 
 tab_editar, tab_nova = st.tabs(
     [
@@ -220,16 +229,10 @@ with tab_editar:
                 )
 
                 st.session_state["excel_atual"] = novo_ficheiro
-                
-                st.success("Projeto atualizado com sucesso.")
 
-                st.download_button(
-                    "📥 Descarregar Excel atualizado",
-                    data=novo_ficheiro,
-                    file_name="SPRD_atualizado.xlsm",
-                    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
-                    use_container_width=True
-                )
+                st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
+                
+                st.rerun()
 
             except Exception as e:
                 st.error(f"Erro ao guardar: {e}")
@@ -345,19 +348,20 @@ with tab_nova:
             )
 
             st.session_state["excel_atual"] = novo_ficheiro
+
+            st.session_state["mensagem"] = "✅ Obra criada com sucesso."
             
-            st.success("Obra criada com sucesso.")
-
-            st.download_button(
-                "📥 Descarregar Excel atualizado",
-                data=novo_ficheiro,
-                file_name="SPRD_atualizado.xlsm",
-                mime="application/vnd.ms-excel.sheet.macroEnabled.12",
-                use_container_width=True
-            )
-
-               
+            st.rerun() 
 
         except Exception as e:
 
             st.error(f"Erro: {e}")
+st.divider()
+        
+st.download_button(
+    "📥 Descarregar Excel atualizado",
+    data=st.session_state["excel_atual"],
+    file_name="SPRD_atualizado.xlsm",
+    mime="application/vnd.ms-excel.sheet.macroEnabled.12",
+    use_container_width=True
+)
