@@ -7,6 +7,16 @@ from formulas import FORMULAS
 from dados import CAMPOS
 from io import BytesIO
 
+def abrir_excel(excel_bytes):
+    """
+    Abre um Excel que está em memória (bytes).
+    """
+
+    return openpyxl.load_workbook(
+        BytesIO(excel_bytes),
+        keep_vba=True
+    )
+
 
 def ler_recenseamentos(ficheiro):
 
