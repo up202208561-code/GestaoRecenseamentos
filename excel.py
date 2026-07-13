@@ -18,20 +18,22 @@ def abrir_excel(excel_bytes):
     )
 
 
-def ler_recenseamentos(ficheiro):
+def ler_recenseamentos(excel_bytes):
 
-    """
-    Lê a folha Recenseamentos e devolve um DataFrame
-    """
+    print("HASH:", hash(excel_bytes))
 
-    if isinstance(ficheiro, bytes):
-        ficheiro = BytesIO(ficheiro)
+    bio = BytesIO(excel_bytes)
+
+    print("POSIÇÃO ANTES:", bio.tell())
 
     dados = pd.read_excel(
-        ficheiro,
+        bio,
         sheet_name="Recenseamentos",
-        header=None
+        header=None,
+        engine="openpyxl"
     )
+
+    print("POSIÇÃO DEPOIS:", bio.tell())
 
     dados = dados.iloc[5:]
 
@@ -41,6 +43,8 @@ def ler_recenseamentos(ficheiro):
         projetos[campo["campo"]] = dados.iloc[:, campo["coluna"] - 1]
 
     projetos = projetos.dropna(subset=["RefObra"])
+
+    print("ÚLTIMA OBRA:", projetos.iloc[-1]["RefObra"])
 
     return projetos
 
