@@ -44,11 +44,6 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
-if (
-    "excel_path" not in st.session_state
-    or st.session_state.get("nome_ficheiro") != ficheiro.name
-):
-
     temp = tempfile.NamedTemporaryFile(
         delete=False,
         suffix=".xlsm"
