@@ -7,13 +7,16 @@ from formulas import FORMULAS
 from dados import CAMPOS
 from io import BytesIO
 
-def abrir_excel(excel_bytes):
+def abrir_excel(ficheiro):
     """
-    Abre um Excel que está em memória (bytes).
+    Abre um Excel a partir de bytes ou de um caminho.
     """
 
+    if isinstance(ficheiro, bytes):
+        ficheiro = BytesIO(ficheiro)
+
     return openpyxl.load_workbook(
-        BytesIO(excel_bytes),
+        ficheiro,
         keep_vba=True
     )
 
