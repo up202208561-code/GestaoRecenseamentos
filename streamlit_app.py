@@ -2,8 +2,6 @@ import streamlit as st
 import openpyxl
 import tempfile
 import hashlib
-import os
-import uuid
 
 from dados import CAMPOS
 from excel import (
@@ -44,15 +42,11 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
-    temp = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".xlsm"
-    )
-
-    temp.write(ficheiro.getbuffer())
-    temp.close()
-
-    st.session_state["excel_path"] = temp.name
+if (
+    "excel_atual" not in st.session_state
+    or st.session_state.get("nome_ficheiro") != ficheiro.name
+):
+    st.session_state["excel_atual"] = ficheiro.getvalue()
     st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
@@ -75,7 +69,7 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            st.session_state["excel_path"]
+            st.session_state["excel_atual"]
         )
 
     except Exception as e:
@@ -131,7 +125,7 @@ if pagina == "✏️ Editar Obra":
         # -------------------------------------------------
 
         wb = abrir_excel(
-            st.session_state["excel_path"]
+            st.session_state["excel_atual"]
         )
 
         ws = wb["Recenseamentos"]
@@ -230,12 +224,13 @@ if pagina == "✏️ Editar Obra":
 
             try:
 
-                guardar_projeto(
-                    st.session_state["excel_path"],
+                novo_ficheiro = guardar_projeto(
+                    st.session_state["excel_atual"],
                     escolha,
                     dados
                 )
-                
+                st.session_state["excel_atual"] = novo_ficheiro
+
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
 
                 st.session_state["upload_key"] += 1
@@ -334,10 +329,12 @@ if pagina == "➕ Nova Obra":
 
         try:
 
-            criar_projeto(
-                st.session_state["excel_path"],
+            novo_ficheiro = criar_projeto(
+                st.session_state["excel_atual"],
                 dados_novos
             )
+
+            st.session_state["excel_atual"] = novo_ficheiro
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
 
@@ -351,12 +348,9 @@ if pagina == "➕ Nova Obra":
 
 st.divider()
 
-with open(st.session_state["excel_path"], "rb") as f:
-    excel_bytes = f.read()
-
 st.download_button(
     "📥 Descarregar Excel atualizado",
-    data=excel_bytes,
+    data=st.session_state["excel_atual"],
     file_name="SPRD_atualizado.xlsm",
     mime="application/vnd.ms-excel.sheet.macroEnabled.12",
     use_container_width=True
