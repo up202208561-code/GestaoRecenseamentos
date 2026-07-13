@@ -130,6 +130,13 @@ if pagina == "✏️ Editar Obra":
 
         ws = wb["Recenseamentos"]
 
+        st.write(
+            "Primeira referência openpyxl:",
+            ws["C6"].value
+        )
+
+        ws = wb["Recenseamentos"]
+
         linha = procurar_linha_projeto(
             ws,
             escolha
