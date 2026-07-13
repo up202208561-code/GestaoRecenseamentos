@@ -2,6 +2,8 @@ import streamlit as st
 import openpyxl
 import tempfile
 import hashlib
+import os
+import uuid
 
 from dados import CAMPOS
 from excel import (
