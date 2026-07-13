@@ -27,7 +27,7 @@ st.title("Gestão de Recenseamentos")
 
 if "nova_obra_id" not in st.session_state:
     st.session_state["nova_obra_id"] = 0
-    
+
 if "upload_key" not in st.session_state:
     st.session_state["upload_key"] = 0
 
@@ -41,12 +41,16 @@ if ficheiro is None:
 
 
 # Guardar Excel em memória durante a sessão
+# (comparação por HASH do conteúdo, não pelo nome)
+
+novo_hash = hashlib.sha256(ficheiro.getvalue()).hexdigest()
 
 if (
     "excel_atual" not in st.session_state
-    or st.session_state.get("nome_ficheiro") != ficheiro.name
+    or st.session_state.get("hash_ficheiro") != novo_hash
 ):
     st.session_state["excel_atual"] = ficheiro.getvalue()
+    st.session_state["hash_ficheiro"] = novo_hash
     st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
@@ -67,7 +71,7 @@ if pagina == "✏️ Editar Obra":
     # -------------------------------------------------
 
     try:
-        
+
         projetos = ler_recenseamentos(
             st.session_state["excel_atual"]
         )
@@ -229,7 +233,9 @@ if pagina == "✏️ Editar Obra":
                     escolha,
                     dados
                 )
+
                 st.session_state["excel_atual"] = novo_ficheiro
+                st.session_state["hash_ficheiro"] = hashlib.sha256(novo_ficheiro).hexdigest()
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
 
@@ -335,6 +341,7 @@ if pagina == "➕ Nova Obra":
             )
 
             st.session_state["excel_atual"] = novo_ficheiro
+            st.session_state["hash_ficheiro"] = hashlib.sha256(novo_ficheiro).hexdigest()
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
 
