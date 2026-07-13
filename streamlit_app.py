@@ -41,6 +41,12 @@ if ficheiro is None:
 
 novo_hash = hashlib.sha256(ficheiro.getvalue()).hexdigest()
 
+st.write("DEBUG — nome:", ficheiro.name)
+st.write("DEBUG — hash novo upload:", novo_hash)
+st.write("DEBUG — hash guardado em session_state:", st.session_state.get("hash_ficheiro"))
+st.write("DEBUG — vai atualizar excel_atual?", 
+    "excel_atual" not in st.session_state or st.session_state.get("hash_ficheiro") != novo_hash)
+
 if (
     "excel_atual" not in st.session_state
     or st.session_state.get("hash_ficheiro") != novo_hash
