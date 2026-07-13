@@ -38,7 +38,10 @@ ficheiro = st.file_uploader(
 
 if ficheiro is None:
     st.stop()
-
+    
+st.write("File ID:", ficheiro.file_id)
+st.write("Nome:", ficheiro.name)
+st.write("Tamanho:", ficheiro.size)
 
 # Guardar Excel em memória durante a sessão
 
