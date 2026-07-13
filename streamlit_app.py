@@ -45,10 +45,19 @@ if ficheiro is None:
 # Guardar Excel em memória durante a sessão
 
 if (
-    "excel_atual" not in st.session_state
+    "excel_path" not in st.session_state
     or st.session_state.get("nome_ficheiro") != ficheiro.name
 ):
-    st.session_state["excel_atual"] = ficheiro.getvalue()
+
+    temp = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".xlsm"
+    )
+
+    temp.write(ficheiro.getbuffer())
+    temp.close()
+
+    st.session_state["excel_path"] = temp.name
     st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
@@ -71,7 +80,7 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            st.session_state["excel_atual"]
+            st.session_state["excel_path"]
         )
 
     except Exception as e:
@@ -127,7 +136,7 @@ if pagina == "✏️ Editar Obra":
         # -------------------------------------------------
 
         wb = abrir_excel(
-            st.session_state["excel_atual"]
+            st.session_state["excel_path"]
         )
 
         ws = wb["Recenseamentos"]
@@ -226,13 +235,12 @@ if pagina == "✏️ Editar Obra":
 
             try:
 
-                novo_ficheiro = guardar_projeto(
-                    st.session_state["excel_atual"],
+                guardar_projeto(
+                    st.session_state["excel_path"],
                     escolha,
                     dados
                 )
-                st.session_state["excel_atual"] = novo_ficheiro
-
+                
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
 
                 st.session_state["upload_key"] += 1
@@ -331,12 +339,10 @@ if pagina == "➕ Nova Obra":
 
         try:
 
-            novo_ficheiro = criar_projeto(
-                st.session_state["excel_atual"],
+            criar_projeto(
+                st.session_state["excel_path"],
                 dados_novos
             )
-
-            st.session_state["excel_atual"] = novo_ficheiro
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
 
