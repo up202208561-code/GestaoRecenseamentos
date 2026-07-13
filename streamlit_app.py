@@ -223,28 +223,23 @@ if pagina == "✏️ Editar Obra":
 
         st.divider()
 
-        if st.button(
-            "💾 Guardar Projeto",
-            use_container_width=True
-        ):
+        if st.button("💾 Guardar Projeto", use_container_width=True):
 
-            try:
+    try:
+        novo_ficheiro = guardar_projeto(
+            st.session_state["excel_atual"],
+            escolha,
+            dados
+        )
+        st.session_state["excel_atual"] = novo_ficheiro
+        st.session_state["hash_ficheiro"] = hashlib.sha256(novo_ficheiro).hexdigest()  # <-- adicionar
 
-                novo_ficheiro = guardar_projeto(
-                    st.session_state["excel_atual"],
-                    escolha,
-                    dados
-                )
-                st.session_state["excel_atual"] = novo_ficheiro
+        st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
+        st.session_state["upload_key"] += 1
+        st.rerun()
 
-                st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
-
-                st.session_state["upload_key"] += 1
-
-                st.rerun()
-
-            except Exception as e:
-                st.error(f"Erro ao guardar: {e}")
+    except Exception as e:
+        st.error(f"Erro ao guardar: {e}")
 
 
 # =================================================
@@ -324,33 +319,26 @@ if pagina == "➕ Nova Obra":
 
     st.divider()
 
-    if st.button(
-        "➕ Criar Obra",
-        use_container_width=True
-    ):
+    if st.button("➕ Criar Obra", use_container_width=True):
 
-        if not dados_novos["RefObra"].strip():
-            st.error("O campo 'Ref. Obra' é obrigatório.")
-            st.stop()
+    if not dados_novos["RefObra"].strip():
+        st.error("O campo 'Ref. Obra' é obrigatório.")
+        st.stop()
 
-        try:
+    try:
+        novo_ficheiro = criar_projeto(
+            st.session_state["excel_atual"],
+            dados_novos
+        )
+        st.session_state["excel_atual"] = novo_ficheiro
+        st.session_state["hash_ficheiro"] = hashlib.sha256(novo_ficheiro).hexdigest()  # <-- adicionar
 
-            novo_ficheiro = criar_projeto(
-                st.session_state["excel_atual"],
-                dados_novos
-            )
+        st.session_state["mensagem"] = "✅ Obra criada com sucesso."
+        st.session_state["nova_obra_id"] += 1
+        st.rerun()
 
-            st.session_state["excel_atual"] = novo_ficheiro
-
-            st.session_state["mensagem"] = "✅ Obra criada com sucesso."
-
-            st.session_state["nova_obra_id"] += 1
-
-            st.rerun()
-
-        except Exception as e:
-
-            st.error(f"Erro: {e}")
+    except Exception as e:
+        st.error(f"Erro: {e}")
 
 st.divider()
 
