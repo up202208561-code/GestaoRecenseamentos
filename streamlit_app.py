@@ -69,7 +69,7 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            ficheiro.getvalue()
+            st.session_state["excel_atual"]
         )
 
     except Exception as e:
@@ -125,7 +125,7 @@ if pagina == "✏️ Editar Obra":
         # -------------------------------------------------
 
         wb = abrir_excel(
-            ficheiro.getvalue()
+            st.session_state["excel_atual"]
         )
 
         ws = wb["Recenseamentos"]
