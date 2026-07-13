@@ -47,6 +47,9 @@ if (
     or st.session_state.get("nome_ficheiro") != ficheiro.name
 ):
     st.session_state["excel_atual"] = ficheiro.getvalue()
+    st.write(
+        hashlib.md5(st.session_state["excel_atual"]).hexdigest()
+    )
     st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
@@ -67,7 +70,10 @@ if pagina == "✏️ Editar Obra":
     # -------------------------------------------------
 
     try:
-        
+
+        st.write(
+            hashlib.md5(st.session_state["excel_atual"]).hexdigest()
+        )
         projetos = ler_recenseamentos(
             st.session_state["excel_atual"]
         )
