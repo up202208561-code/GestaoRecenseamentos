@@ -42,6 +42,8 @@ def ler_recenseamentos(ficheiro):
 
     projetos = projetos.dropna(subset=["RefObra"])
 
+    st.write("Primeiras referências:")
+    st.write(projetos["RefObra"].head(20).tolist())
     return projetos
 
 
