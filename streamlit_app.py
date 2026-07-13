@@ -42,12 +42,11 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
-if (
-    "excel_atual" not in st.session_state
-    or st.session_state.get("nome_ficheiro") != ficheiro.name
-):
+hash_upload = hashlib.md5(ficheiro.getvalue()).hexdigest()
+
+if st.session_state.get("hash_upload") != hash_upload:
     st.session_state["excel_atual"] = ficheiro.getvalue()
-    st.session_state["nome_ficheiro"] = ficheiro.name
+    st.session_state["hash_upload"] = hash_upload
 
 pagina = st.radio(
     "",
