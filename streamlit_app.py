@@ -57,7 +57,7 @@ pagina = st.radio(
 )
 
 st.write(
-    "HASH FORA:",
+    "HASH:",
     hashlib.md5(st.session_state["excel_atual"]).hexdigest()
 )
 # =================================================
@@ -73,10 +73,7 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-        st.write(
-            "HASH DENTRO:",
-             hashlib.md5(ficheiro).hexdigest()
-        )
+            raise Exception(hashlib.md5(ficheiro).hexdigest())
             st.session_state["excel_atual"]
         )
 
