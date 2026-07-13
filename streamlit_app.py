@@ -344,9 +344,12 @@ if pagina == "➕ Nova Obra":
         try:
 
             novo_ficheiro = criar_projeto(
-                st.session_state["excel_atual"],
+                st.session_state["ficheiro_temp"],
                 dados_novos
             )
+
+            with open(st.session_state["ficheiro_temp"], "wb") as f:
+                f.write(novo_ficheiro)
 
             st.session_state["excel_atual"] = novo_ficheiro
 
