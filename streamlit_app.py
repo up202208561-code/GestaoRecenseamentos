@@ -335,7 +335,7 @@ if pagina == "➕ Nova Obra":
 
             st.session_state["mensagem"] = "✅ Obra criada com sucesso."
             st.session_state["nova_obra_id"] += 1
-                st.rerun()
+            st.rerun()
 
         except Exception as e:
             st.error(f"Erro: {e}")
