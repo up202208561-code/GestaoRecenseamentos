@@ -7,16 +7,13 @@ from formulas import FORMULAS
 from dados import CAMPOS
 from io import BytesIO
 
-def abrir_excel(ficheiro):
+def abrir_excel(excel_bytes):
     """
-    Abre um Excel a partir de bytes ou de um caminho.
+    Abre um Excel que está em memória (bytes).
     """
-
-    if isinstance(ficheiro, bytes):
-        ficheiro = BytesIO(ficheiro)
 
     return openpyxl.load_workbook(
-        ficheiro,
+        BytesIO(excel_bytes),
         keep_vba=True
     )
 
@@ -135,7 +132,7 @@ def ler_projeto(ws, linha):
 
     return projeto
 
-def guardar_projeto(caminho_excel, ref_obra, dados_projeto):
+def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
     """
     Atualiza todos os campos editáveis de uma obra.
     dados_projeto é um dicionário:
@@ -147,10 +144,7 @@ def guardar_projeto(caminho_excel, ref_obra, dados_projeto):
     }
     """
 
-    wb = openpyxl.load_workbook(
-        caminho_excel,
-        keep_vba=True
-    )
+    wb = abrir_excel(excel_bytes)
 
     ws = wb["Recenseamentos"]
 
@@ -187,18 +181,19 @@ def guardar_projeto(caminho_excel, ref_obra, dados_projeto):
                 column=coluna
             ).value = formula.format(r=linha)
 
-    wb.save(caminho_excel)
+    buffer = BytesIO()
 
-def criar_projeto(caminho_excel, dados_projeto):
+    wb.save(buffer)
+
+    return buffer.getvalue()
+
+def criar_projeto(excel_bytes, dados_projeto):
     """
     Cria uma nova obra mantendo fórmulas, estilos e formatação.
     Se não existir nenhuma obra, utiliza a linha 6 como modelo.
     """
 
-    wb = openpyxl.load_workbook(
-        caminho_excel,
-        keep_vba=True
-    )
+    wb = abrir_excel(excel_bytes)
 
     ws = wb["Recenseamentos"]
 
@@ -307,4 +302,8 @@ def criar_projeto(caminho_excel, dados_projeto):
             column=coluna
         ).value = formula.format(r=nova_linha)
 
-    wb.save(caminho_excel)
+    buffer = BytesIO()
+
+    wb.save(buffer)
+
+    return buffer.getvalue()
