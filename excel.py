@@ -20,25 +20,30 @@ def abrir_excel(excel_bytes):
 
 def ler_recenseamentos(ficheiro):
 
-    wb = abrir_excel(ficheiro)
+    """
+    Lê a folha Recenseamentos e devolve um DataFrame
+    """
 
-    ws = wb["Recenseamentos"]
+    if isinstance(ficheiro, bytes):
+        ficheiro = BytesIO(ficheiro)
 
-    dados = []
+    dados = pd.read_excel(
+        ficheiro,
+        sheet_name="Recenseamentos",
+        header=None
+    )
 
-    for linha in ws.iter_rows(min_row=6, values_only=True):
-        dados.append(linha)
-
-    df = pd.DataFrame(dados)
+    dados = dados.iloc[5:]
 
     projetos = pd.DataFrame()
 
     for campo in CAMPOS:
-        projetos[campo["campo"]] = df.iloc[:, campo["coluna"] - 1]
+        projetos[campo["campo"]] = dados.iloc[:, campo["coluna"] - 1]
 
     projetos = projetos.dropna(subset=["RefObra"])
 
     return projetos
+
 
 
 def pesquisar_projetos(projetos, texto):
