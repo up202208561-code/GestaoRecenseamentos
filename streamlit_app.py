@@ -42,6 +42,10 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
+if (
+    "excel_atual" not in st.session_state
+    or st.session_state.get("nome_ficheiro") != ficheiro.name
+):
     st.session_state["excel_atual"] = ficheiro.getvalue()
     st.session_state["nome_ficheiro"] = ficheiro.name
 
