@@ -1,31 +1,33 @@
 import pandas as pd
 import openpyxl
 import tempfile
+import os
 
 from copy import copy
 from formulas import FORMULAS
 from dados import CAMPOS
 from io import BytesIO
 
-def abrir_excel(excel_bytes):
-    """
-    Abre um Excel que está em memória (bytes).
-    """
+def abrir_excel(origem):
+
+    if isinstance(origem, str):
+        return openpyxl.load_workbook(
+            origem,
+            keep_vba=True
+        )
 
     return openpyxl.load_workbook(
-        BytesIO(excel_bytes),
+        BytesIO(origem),
         keep_vba=True
     )
 
-
 def ler_recenseamentos(ficheiro):
-
-    """
-    Lê a folha Recenseamentos e devolve um DataFrame
-    """
 
     if isinstance(ficheiro, bytes):
         ficheiro = BytesIO(ficheiro)
+
+    elif isinstance(ficheiro, str):
+        pass  # é o caminho para um ficheiro
 
     dados = pd.read_excel(
         ficheiro,
