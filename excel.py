@@ -185,6 +185,8 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
 
     wb.save(buffer)
 
+    buffer.seek(0)
+
     return buffer.getvalue()
 
 def criar_projeto(excel_bytes, dados_projeto):
@@ -305,5 +307,7 @@ def criar_projeto(excel_bytes, dados_projeto):
     buffer = BytesIO()
 
     wb.save(buffer)
+
+    buffer.seek(0)
 
     return buffer.getvalue()
