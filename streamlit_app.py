@@ -72,6 +72,8 @@ if pagina == "✏️ Editar Obra":
             st.session_state["excel_atual"]
         )
 
+        st.write("Última obra da tabela:", projetos.iloc[-1]["RefObra"])
+
     except Exception as e:
 
         st.error(e)
