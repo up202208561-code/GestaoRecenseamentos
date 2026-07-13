@@ -73,10 +73,10 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            st.write(
-                "HASH DENTRO:",
-                hashlib.md5(ficheiro).hexdigest()
-            )
+        st.write(
+            "HASH DENTRO:",
+             hashlib.md5(ficheiro).hexdigest()
+        )
             st.session_state["excel_atual"]
         )
 
