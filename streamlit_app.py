@@ -241,7 +241,7 @@ if pagina == "✏️ Editar Obra":
                 )
 
                 with open(st.session_state["ficheiro_temp"], "wb") as f:
-                f.write(novo_ficheiro)
+                    f.write(novo_ficheiro)
 
                 st.session_state["excel_atual"] = novo_ficheiro
 
