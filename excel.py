@@ -41,9 +41,8 @@ def ler_recenseamentos(ficheiro):
         projetos[campo["campo"]] = dados.iloc[:, campo["coluna"] - 1]
 
     projetos = projetos.dropna(subset=["RefObra"])
-    print(projetos["RefObra"].head(20).tolist())
-    return projetos
 
+    return projetos
 
 
 def pesquisar_projetos(projetos, texto):
