@@ -8,12 +8,12 @@ from dados import CAMPOS
 from io import BytesIO
 
 def abrir_excel(excel_bytes):
-    """
-    Abre um Excel que está em memória (bytes).
-    """
+
+    ficheiro = BytesIO(excel_bytes)
+    ficheiro.seek(0)
 
     return openpyxl.load_workbook(
-        BytesIO(excel_bytes),
+        ficheiro,
         keep_vba=True
     )
 
