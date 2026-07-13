@@ -132,7 +132,7 @@ def ler_projeto(ws, linha):
 
     return projeto
 
-def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
+def guardar_projeto(caminho_excel, ref_obra, dados_projeto):
     """
     Atualiza todos os campos editáveis de uma obra.
     dados_projeto é um dicionário:
@@ -144,7 +144,10 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
     }
     """
 
-    wb = abrir_excel(excel_bytes)
+    wb = openpyxl.load_workbook(
+        caminho_excel,
+        keep_vba=True
+    )
 
     ws = wb["Recenseamentos"]
 
@@ -181,19 +184,18 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
                 column=coluna
             ).value = formula.format(r=linha)
 
-    buffer = BytesIO()
+    wb.save(caminho_excel)
 
-    wb.save(buffer)
-
-    return buffer.getvalue()
-
-def criar_projeto(excel_bytes, dados_projeto):
+def criar_projeto(caminho_excel, dados_projeto):
     """
     Cria uma nova obra mantendo fórmulas, estilos e formatação.
     Se não existir nenhuma obra, utiliza a linha 6 como modelo.
     """
 
-    wb = abrir_excel(excel_bytes)
+    wb = openpyxl.load_workbook(
+        caminho_excel,
+        keep_vba=True
+    )
 
     ws = wb["Recenseamentos"]
 
@@ -302,8 +304,4 @@ def criar_projeto(excel_bytes, dados_projeto):
             column=coluna
         ).value = formula.format(r=nova_linha)
 
-    buffer = BytesIO()
-
-    wb.save(buffer)
-
-    return buffer.getvalue()
+    wb.save(caminho_excel)
