@@ -8,37 +8,41 @@ from dados import CAMPOS
 from io import BytesIO
 
 def abrir_excel(excel_bytes):
-
-    ficheiro = BytesIO(excel_bytes)
-    ficheiro.seek(0)
+    """
+    Abre um Excel que está em memória (bytes).
+    """
 
     return openpyxl.load_workbook(
-        ficheiro,
+        BytesIO(excel_bytes),
         keep_vba=True
     )
 
 
-def ler_recenseamentos(excel_bytes):
+def ler_recenseamentos(ficheiro):
 
-    wb = abrir_excel(excel_bytes)
+    """
+    Lê a folha Recenseamentos e devolve um DataFrame
+    """
 
-    ws = wb["Recenseamentos"]
+    if isinstance(ficheiro, bytes):
+        ficheiro = BytesIO(ficheiro)
 
-    linhas = []
+    dados = pd.read_excel(
+        ficheiro,
+        sheet_name="Recenseamentos",
+        header=None
+    )
 
-    for row in ws.iter_rows(min_row=6, values_only=True):
+    dados = dados.iloc[5:]
 
-        if row[2] in (None, ""):
-            continue
+    projetos = pd.DataFrame()
 
-        registo = {}
+    for campo in CAMPOS:
+        projetos[campo["campo"]] = dados.iloc[:, campo["coluna"] - 1]
 
-        for campo in CAMPOS:
-            registo[campo["campo"]] = row[campo["coluna"] - 1]
+    projetos = projetos.dropna(subset=["RefObra"])
 
-        linhas.append(registo)
-
-    return pd.DataFrame(linhas)
+    return projetos
 
 
 def pesquisar_projetos(projetos, texto):
@@ -181,8 +185,6 @@ def guardar_projeto(excel_bytes, ref_obra, dados_projeto):
 
     wb.save(buffer)
 
-    buffer.seek(0)
-
     return buffer.getvalue()
 
 def criar_projeto(excel_bytes, dados_projeto):
@@ -303,7 +305,5 @@ def criar_projeto(excel_bytes, dados_projeto):
     buffer = BytesIO()
 
     wb.save(buffer)
-
-    buffer.seek(0)
 
     return buffer.getvalue()
