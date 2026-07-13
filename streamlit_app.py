@@ -56,6 +56,10 @@ pagina = st.radio(
     key="pagina"
 )
 
+st.write(
+    "HASH FORA:",
+    hashlib.md5(st.session_state["excel_atual"]).hexdigest()
+)
 # =================================================
 # EDITAR OBRA
 # =================================================
@@ -69,10 +73,12 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
+            st.write(
+                "HASH DENTRO:",
+                hashlib.md5(ficheiro).hexdigest()
+            )
             st.session_state["excel_atual"]
         )
-
-        st.write("Última obra da tabela:", projetos.iloc[-1]["RefObra"])
 
     except Exception as e:
 
