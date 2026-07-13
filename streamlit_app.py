@@ -106,6 +106,7 @@ if pagina == "✏️ Editar Obra":
 
         resultados = projetos
 
+    st.write(resultados["RefObra"].tolist())
     st.dataframe(
         resultados,
         use_container_width=True
