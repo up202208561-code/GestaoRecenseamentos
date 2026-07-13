@@ -41,9 +41,7 @@ def ler_recenseamentos(ficheiro):
         projetos[campo["campo"]] = dados.iloc[:, campo["coluna"] - 1]
 
     projetos = projetos.dropna(subset=["RefObra"])
-
-    st.write("Primeiras referências:")
-    st.write(projetos["RefObra"].head(20).tolist())
+    print(projetos["RefObra"].head(20).tolist())
     return projetos
 
 
