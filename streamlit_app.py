@@ -2,6 +2,7 @@ import streamlit as st
 import openpyxl
 import tempfile
 import hashlib
+import os
 
 from dados import CAMPOS
 from excel import (
@@ -42,11 +43,21 @@ if ficheiro is None:
 
 # Guardar Excel em memória durante a sessão
 
-hash_upload = hashlib.md5(ficheiro.getvalue()).hexdigest()
+if (
+    "ficheiro_temp" not in st.session_state
+    or st.session_state.get("nome_ficheiro") != ficheiro.name
+):
 
-if st.session_state.get("hash_upload") != hash_upload:
-    st.session_state["excel_atual"] = ficheiro.getvalue()
-    st.session_state["hash_upload"] = hash_upload
+    tmp = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".xlsm"
+    )
+
+    tmp.write(ficheiro.getvalue())
+    tmp.close()
+
+    st.session_state["ficheiro_temp"] = tmp.name
+    st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
     "",
@@ -68,7 +79,7 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            st.session_state["excel_atual"]
+            st.session_state["ficheiro_temp"]
         )
 
     except Exception as e:
