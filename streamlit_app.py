@@ -38,7 +38,7 @@ ficheiro = st.file_uploader(
 
 if ficheiro is None:
     st.stop()
-    
+
 
 # Guardar Excel em memória durante a sessão
 
@@ -56,10 +56,6 @@ pagina = st.radio(
     key="pagina"
 )
 
-st.write(
-    "HASH:",
-    hashlib.md5(st.session_state["excel_atual"]).hexdigest()
-)
 # =================================================
 # EDITAR OBRA
 # =================================================
@@ -73,7 +69,6 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            raise Exception(hashlib.md5(ficheiro).hexdigest())
             st.session_state["excel_atual"]
         )
 
