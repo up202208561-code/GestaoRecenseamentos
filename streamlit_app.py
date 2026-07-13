@@ -235,10 +235,14 @@ if pagina == "✏️ Editar Obra":
             try:
 
                 novo_ficheiro = guardar_projeto(
-                    st.session_state["excel_atual"],
+                    st.session_state["ficheiro_temp"],
                     escolha,
                     dados
                 )
+
+                with open(st.session_state["ficheiro_temp"], "wb") as f:
+                f.write(novo_ficheiro)
+
                 st.session_state["excel_atual"] = novo_ficheiro
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
