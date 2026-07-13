@@ -135,7 +135,7 @@ if pagina == "✏️ Editar Obra":
         # -------------------------------------------------
 
         wb = abrir_excel(
-            st.session_state["excel_atual"]
+            st.session_state["ficheiro_temp"]
         )
 
         ws = wb["Recenseamentos"]
