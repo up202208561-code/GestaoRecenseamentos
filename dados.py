@@ -228,7 +228,7 @@ CAMPOS = [
         "campo": "NovoConsumo",
         "coluna": 27,
         "tipo": "float",
-        "editavel": True
+        "editavel": False
     },
 
     {
