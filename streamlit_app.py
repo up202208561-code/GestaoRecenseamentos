@@ -356,9 +356,12 @@ if pagina == "➕ Nova Obra":
 
 st.divider()
 
+with open(st.session_state["excel_path"], "rb") as f:
+    excel_bytes = f.read()
+
 st.download_button(
     "📥 Descarregar Excel atualizado",
-    data=st.session_state["excel_atual"],
+    data=excel_bytes,
     file_name="SPRD_atualizado.xlsm",
     mime="application/vnd.ms-excel.sheet.macroEnabled.12",
     use_container_width=True
