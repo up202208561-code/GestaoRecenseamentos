@@ -2,7 +2,6 @@ import streamlit as st
 import openpyxl
 import tempfile
 import hashlib
-import os
 
 from dados import CAMPOS
 from excel import (
@@ -44,19 +43,10 @@ if ficheiro is None:
 # Guardar Excel em memória durante a sessão
 
 if (
-    "ficheiro_temp" not in st.session_state
+    "excel_atual" not in st.session_state
     or st.session_state.get("nome_ficheiro") != ficheiro.name
 ):
-
-    tmp = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".xlsm"
-    )
-
-    tmp.write(ficheiro.getvalue())
-    tmp.close()
-
-    st.session_state["ficheiro_temp"] = tmp.name
+    st.session_state["excel_atual"] = ficheiro.getvalue()
     st.session_state["nome_ficheiro"] = ficheiro.name
 
 pagina = st.radio(
@@ -79,7 +69,7 @@ if pagina == "✏️ Editar Obra":
     try:
         
         projetos = ler_recenseamentos(
-            st.session_state["ficheiro_temp"]
+            st.session_state["excel_atual"]
         )
 
     except Exception as e:
@@ -135,7 +125,7 @@ if pagina == "✏️ Editar Obra":
         # -------------------------------------------------
 
         wb = abrir_excel(
-            st.session_state["ficheiro_temp"]
+            st.session_state["excel_atual"]
         )
 
         ws = wb["Recenseamentos"]
@@ -235,14 +225,10 @@ if pagina == "✏️ Editar Obra":
             try:
 
                 novo_ficheiro = guardar_projeto(
-                    st.session_state["ficheiro_temp"],
+                    st.session_state["excel_atual"],
                     escolha,
                     dados
                 )
-
-                with open(st.session_state["ficheiro_temp"], "wb") as f:
-                    f.write(novo_ficheiro)
-
                 st.session_state["excel_atual"] = novo_ficheiro
 
                 st.session_state["mensagem"] = "✅ Projeto atualizado com sucesso."
@@ -344,12 +330,9 @@ if pagina == "➕ Nova Obra":
         try:
 
             novo_ficheiro = criar_projeto(
-                st.session_state["ficheiro_temp"],
+                st.session_state["excel_atual"],
                 dados_novos
             )
-
-            with open(st.session_state["ficheiro_temp"], "wb") as f:
-                f.write(novo_ficheiro)
 
             st.session_state["excel_atual"] = novo_ficheiro
 
